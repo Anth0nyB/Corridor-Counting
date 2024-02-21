@@ -1,0 +1,5 @@
+pip install virtualenv
+virtualenv -p python3.6 <environment_name>
+source <environment_name>/bin/activate
+pip install -r requirements.xt
+python inference.py 1 46

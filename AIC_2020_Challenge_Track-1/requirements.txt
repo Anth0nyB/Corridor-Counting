@@ -1,0 +1,16 @@
+Cython
+torch==1.5.0+cu101
+torchvision==0.6.0+cu101
+-f https://download.pytorch.org/whl/cu101/torch_stable.html
+opencv-python==4.2.0.34
+pandas==0.24.2
+numpy==1.17.3
+scikit-learn==0.21.2
+filterpy==1.4.5
+easydict==1.9
+numba==0.46.0
+tensorboard>=1.14
+pycocotools==2.0.0
+tqdm==4.33.0
+pillow==6.1.0
+llvmlite==0.32.1
