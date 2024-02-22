@@ -1,0 +1,7 @@
+*/datasets
+*/data
+*/output/*
+*/weights/*
+*/reid_bidir/reid_model/*
+*/detector/yolov5/yolov5x.pt
+*/venv

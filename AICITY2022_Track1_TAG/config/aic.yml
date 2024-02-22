@@ -1,0 +1,11 @@
+CHALLENGE_DATA_DIR: "${ROOT}/datasets/Dataset_A"
+DET_SOURCE_DIR: "${ROOT}/datasets/detection/images/test/S06/"
+DATA_DIR: "${ROOT}/datasets/detect/"
+REID_SIZE_TEST: [384, 384]
+ROI_DIR: "${ROOT}/datasets/Dataset_A/test/S06/"
+CID_BIAS_DIR: "${ROOT}/datasets/Dataset_A/cam_timestamp/"
+USE_RERANK: True
+USE_FF: True
+SCORE_THR: 0.1
+MCMT_OUTPUT_TXT: "track1.txt"
+MCMT_Interpo_OUTPUT_TXT: "track1_interpolation.txt"
