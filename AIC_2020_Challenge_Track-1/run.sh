@@ -1,6 +1,6 @@
 #!/bin/bash 
 # 
-#SBATCH --job-name=Didi1_test 
+#SBATCH --job-name=counting
 #SBATCH --output=console.out 
 # 
 #SBATCH --partition=gpu
@@ -11,7 +11,7 @@
 #SBATCH --mem-per-cpu=4G
 #SBATCH --time=08:00:00 
 #
-#SBATCH --mail-user=abryson@scu.edu
+#SBATCH --mail-user=<user_email>
 #SBATCH --mail-type=END
 
 source venv/bin/activate

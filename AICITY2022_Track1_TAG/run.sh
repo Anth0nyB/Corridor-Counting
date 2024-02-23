@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --job-name=TAG_test
+#SBATCH --job-name=mtmct
 #SBATCH --output=console.out
 #
 #SBATCH --partition=gpu
@@ -11,12 +11,13 @@
 #SBATCH --mem-per-cpu=4G
 #SBATCH --time=1-00:00:00
 #
-#SBATCH --mail-user=abryson@scu.edu
+#SBATCH --mail-user=<user_email>
 #SBATCH --mail-type=END
 
 source venv/bin/activate
 module load Python
 module load GCC/12.3.0
+export MTMCT_ROOT=$ROOT/AICITY2022_Track1_TAG
 
 cd detector
 python gen_images_aic.py aic.yml
