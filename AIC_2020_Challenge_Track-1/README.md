@@ -1,4 +1,4 @@
-# Counting module modified from [AIC 2020 Challenge Track 1 by Orange-Control] (https://github.com/liwenwei123/AIC_2020_Challenge_Track-1)
+# Counting module modified from [AIC 2020 Challenge Track 1 by Orange-Control](https://github.com/liwenwei123/AIC_2020_Challenge_Track-1)
 
 [3rd place](https://www.aicitychallenge.org/challenge-winners-2020/) (with **the best Efficiency Score**) in _Challenge Track 1: Multi-Class Multi-Movement Vehicle Counting_ in **2020 AI City Challenge** @ CVPR.
 

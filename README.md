@@ -20,7 +20,6 @@ virtualenv -p python3.6 venv
 source venv/bin/activate
 pip install -r requirements.txt
 deactivate
-
 ```
 
 Follow the instructions in `AIC_2020_Challenge_Track-1/README.md` to download the inference model _best.pt_. NOTE: Don't download any datasets.
@@ -35,7 +34,6 @@ virtualenv -p python3.6 venv
 source venv/bin/activate
 pip install -r detector/yolov5/requirements.txt
 deactivate
-
 ```
 
 Follow the instructions in `AICITY2022_Track1_TAG/README.md` to download the already trained ReID models and the detection model _yolov5x.pt_. NOTE: Don't download any datasets and you don't need to run `bash gen_det.sh aic.yml`
@@ -47,5 +45,4 @@ To run the full pipeline **_WIP_**
 ```
 export ROOT=$PWD
 ...
-
 ```

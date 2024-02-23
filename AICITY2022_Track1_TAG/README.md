@@ -1,4 +1,4 @@
-# MTMCT module modified from [AICITY2022_Track1_TAG] (https://github.com/backkon/AICITY2022_Track1_TAG)
+# MTMCT module modified from [AICITY2022_Track1_TAG](https://github.com/backkon/AICITY2022_Track1_TAG)
 
 Their code is modified from [AIC21-MTMC](https://github.com/LCFractal/AIC21-MTMC).
 
