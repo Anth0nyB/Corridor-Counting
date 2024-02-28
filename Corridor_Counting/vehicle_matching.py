@@ -61,7 +61,7 @@ def get_vehicle_movements(
 
     :param mtmct_file: The MTMCT file
     :param counting_file: The counting file
-    :return: A mapping from universal ID to a list of tuples, consisting of a camera ID, and frame #, movement ID
+    :return: A mapping from universal ID to a list of tuples, consisting of a camera ID, frame #, and movement ID
     """
     mtmct = pd.read_csv(mtmct_file, names=MTMCT_COLUMNS, sep=" ")
     mtmct = mtmct.sort_values(by=["camera_id", "frame_id"])
@@ -81,7 +81,7 @@ def get_vehicle_movements(
     return results
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("mtmct_file", type=argparse.FileType("r"))
     parser.add_argument("counting_file", type=argparse.FileType("r"))
