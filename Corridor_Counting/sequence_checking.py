@@ -3,6 +3,7 @@ from typing import TextIO, List, Dict, Tuple, Any
 
 from vehicle_matching import get_vehicle_movements
 
+
 def get_sequences(sequence_file: TextIO) -> List[List[Tuple[int, int]]]:
     """
     Reads and formats all the pre-defined corridors
@@ -38,12 +39,21 @@ def match_vehicles_to_sequence(vehicles, sequences) -> Dict[int, Dict[str, List[
         vehicle_movements = [(get_intersection(item[0]), item[2]) for item in data]
         
         for seq_id, seq in enumerate(sequences):
-            #TODO: after testing, can be simplified to {uid: List_of_seq_id}
+            # TODO: after testing, can be simplified to {uid: List_of_seq_id}
             matches.setdefault(uid, {"movements": vehicle_movements, "matched_sequences": []})
             if seq in vehicle_movements:
                 matches[uid]["matched_sequences"].append((seq_id, seq))
 
     return matches
+
+
+def main(mtmct_file: TextIO, counting_file: TextIO, sequence_file: TextIO):
+    vehicles = get_vehicle_movements(mtmct_file, counting_file)
+    sequences = get_sequences(sequence_file)
+
+    mappings = match_vehicles_to_sequence(vehicles, sequences)
+    print(mappings)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -51,9 +61,3 @@ if __name__ == "__main__":
     parser.add_argument("counting_file", type=argparse.FileType("r"))
     parser.add_argument("sequence_file", type=argparse.FileType("r"))
     args = parser.parse_args()
-
-    vehicles = get_vehicle_movements(args.mtmct_file, args.counting_file)
-    sequences = get_sequences(args.sequence_file)
-
-    mappings = match_vehicles_to_sequence(vehicles, sequences)
-    print(mappings)
