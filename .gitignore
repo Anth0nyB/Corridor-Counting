@@ -6,3 +6,6 @@
 */detector/yolov5/yolov5x.pt
 */venv
 */reid_bidir/reid-matching/tools/exp
+AIC_2020_Challenge_Track-1/__pycache__/*
+AIC_2020_Challenge_Track-1/utils/__pycache__/*
+AICITY2022_Track1_TAG/config/__pycache__/*
