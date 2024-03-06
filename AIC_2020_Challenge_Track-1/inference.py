@@ -6,6 +6,7 @@ import os
 import torch
 import numpy as np
 import cv2
+from glob import glob
 from get_lines import *
 from sort import *
 from models import *  
@@ -17,6 +18,7 @@ start_video = sys.argv[1]
 end_video = sys.argv[2]
 
 data_path = 'data'
+frames_path = "../AICITY2022_Track1_TAG/datasets/detection/images/test/S06"
 datasetA_path = os.path.join(data_path, 'Dataset_A')
 video_id_dict = get_video_id(datasetA_path)
 classes = {0:'car', 1:'truck'}
@@ -88,187 +90,207 @@ def get_boxes(frame):
             bboxes = det.cpu().numpy()
             return bboxes
 
-for video_id in range(int(start_video), int(end_video)+1):
-    print('video_id:%s' % str(video_id))
-    video_name = video_id_dict[video_id] 
-    cam_id = int(video_name.split('.')[0].split('_')[1])
-    mov_nums, lines, directions, mov_rois = get_lines(cam_id)
-    roi_nums, rois = get_rois(cam_id, data_path)
-    counts = [0] * mov_nums
-    counts_roi = [0] * roi_nums
-    vs = cv2.VideoCapture(os.path.join(datasetA_path, video_name))
-    (W, H) = (None, None)
-    writer = None
-    last_frames = {}
-    tracker = Sort()
-    memory = {}
-    pts = [deque(maxlen=50) for _ in range(1000000)]
-    detect_flag = False
-    flags = [False] * mov_nums
-    indexids = [0] * mov_nums
-    delays = []
-    for i in range(mov_nums):
-        delays.append([])
-    # save output result of every video
-    csv_file_processed = open(os.path.join('.', output_path, '{}.csv'.format(video_id)), 'w')
-    csv_writer_processed = csv.writer(csv_file_processed)
-    csv_writer_processed.writerow(['video_id', 'frame_id', 'movement_id', 'vehicle_class_id','xmin', 'ymin', 'width', 'height'])
-    data = {}
-    frame_count = 0
-    while True:
-        ret, frame = vs.read()
-        if not ret:
-            result = []
-            result_ori = []
-            for key in data:
-                video_id, frame, mov, name, roi_flag, x1, y1, x2, y2 = data[key][0], data[key][1], data[key][2], data[key][3], data[key][4], data[key][5], data[key][6], data[key][7], data[key][8]
-                w = x2 - x1
-                h = y2 - y1
-                if name != name:
-                    name = 1
-                result_ori.append((str(video_id), str(int(frame)), str(mov + 1), str(name)))
-                if roi_flag == True:
-                    if int(frame) > frame_count:
-                        frame = frame_count
-                    result.append((str(video_id), str(int(frame)), str(mov + 1), str(name), str(x1), str(y1), str(w), str(h)))
-                else:    
-                    if len(delays[mov]) > 0:
-                        frame_delay = frame + sum(delays[mov])/len(delays[mov])
-                    else:
-                        frame_delay = last_frames[key]
-       
-                    if int(frame_delay) > frame_count:
-                        frame_delay = frame_count
-                    result.append((str(video_id), str(int(frame_delay)), str(mov + 1), str(name), str(x1), str(y1), str(w), str(h)))
-            csv_writer_processed.writerows(result)
-            csv_file_processed.close()
-            break
-        frame_count += 1
-        print(frame_count)
-        with torch.no_grad():
-            bboxes = get_boxes(frame)
-        if W is None or H is None:
-            (H, W) = frame.shape[:2]
-        boxes = []
-        confidences = []
-        classIDs = []
-        try:
-            for i, bbox in enumerate(bboxes):
-                coor = np.array(bbox[:4], dtype=np.int32)
-                score = bbox[4]
-                class_ind = int(bbox[5])
-                c1, c2 = (coor[0], coor[1]), (coor[2], coor[3])
-                boxes.append([int(coor[0]), int(coor[1]), int(coor[2] - coor[0]), int(coor[3] - coor[1]), class_ind])
-                confidences.append(float(score))
-                classIDs.append(class_ind)
-        except:
-            print(frame_count)
-        idxs = list(range(len(boxes)))
-        dets = []
-        record = []
-        if len(idxs) > 0:
-            for i in idxs:
-                (x, y) = (boxes[i][0], boxes[i][1])
-                (w, h) = (boxes[i][2], boxes[i][3])
-                class_ind = bboxes[i][5]
-                if classes[class_ind] == 'car' or \
-                        classes[class_ind] == 'bus' or \
-                        classes[class_ind] == 'truck' or \
-                        classes[class_ind] == 'train':
-                    dets.append([x, y, x + w, y + h, confidences[i]])
-                    center_x = int(x + 0.5 * w)
-                    cneter_y = int(y + 0.5 * h)
-                    record.append((center_x, cneter_y, int(class_ind)))
-        np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-        dets = np.asarray(dets)
-        #print(dets)
-        tracks = tracker.update(dets)
-        boxes = []
-        indexIDs = []
-        previous = memory.copy()
+
+if __name__=='__main__':
+    for video_id in range(int(start_video), int(end_video)+1):
+        print('video_id:%s' % str(video_id))
+        video_name = video_id_dict[video_id] 
+
+        # Might have to change value and rename to intersection id
+        cam_id = int(video_name.split('.')[0].split('_')[1])
+        num_movs, mov_vectors = get_lines(cam_id + 40)
+        num_exits, exits = get_exits(cam_id + 40)
+        roi_nums, rois = get_rois(cam_id, data_path)
+        counts = [0] * num_movs
+        counts_roi = [0] * roi_nums
+        # vs = cv2.VideoCapture(os.path.join(datasetA_path, video_name))
+
+        cam = "c%.3d" % (video_id + 40)
+        image_dir = os.path.join(frames_path, cam, "img1")
+        cam_image_list = glob.glob(image_dir+'/*.jpg')
+        image_list = sorted(cam_image_list)
+
+        (W, H) = (None, None)
+        writer = None
+        last_frames = {}
+        tracker = Sort()
         memory = {}
-        for track in tracks:
-            boxes.append([track[0], track[1], track[2], track[3]])
-            indexIDs.append(int(track[4]))
-            memory[indexIDs[-1]] = boxes[-1]
-        if len(boxes) > 0:
-            i = int(0)
-            for box in boxes:
-                if indexIDs[i] in last_frames:
-                    if frame_count > last_frames[indexIDs[i]]:
-                        last_frames[indexIDs[i]] = frame_count
-                (x, y) = (int(box[0]), int(box[1]))
-                (w, h) = (int(box[2]), int(box[3]))
-                center = (int(0), int(0))
-                if indexIDs[i] in previous:
-                    previous_box = previous[indexIDs[i]]
-                    (x2, y2) = (int(previous_box[0]), int(previous_box[1]))
-                    (w2, h2) = (int(previous_box[2]), int(previous_box[3]))
-                    p0 = (int(x + (w - x) / 2), int(y + (h - y) / 2))
-                    p1 = (int(x2 + (w2 - x2) / 2), int(y2 + (h2 - y2) / 2))      
-                    for mov in range(mov_nums):
-                        if intersect(p0, p1, lines[mov][0], lines[mov][1]):
-                            if directions == []:
+        prev = {}
+        pts = [deque(maxlen=50) for _ in range(1000000)]
+        detect_flag = False
+        flags = [False] * num_movs
+        indexids = [0] * num_movs
+        delays = []
+        for i in range(num_movs):
+            delays.append([])
+        # save output result of every video
+        csv_file_processed = open(os.path.join('.', output_path, '{}.csv'.format(video_id)), 'w')
+        csv_writer_processed = csv.writer(csv_file_processed)
+        csv_writer_processed.writerow(['video_id', 'frame_id', 'movement_id', 'vehicle_class_id','xmin', 'ymin', 'width', 'height'])
+        data = {}
+        frame_count = 0
+        while True:
+            if not image_list:
+                result = []
+                result_ori = []
+                for key in data:
+                    video_id, frame, mov, name, roi_flag, x1, y1, x2, y2, ox1, oy1, ox2, oy2 = data[key][0], data[key][1], data[key][2], data[key][3], data[key][4], data[key][5], data[key][6], data[key][7], data[key][8] , data[key][9], data[key][10], data[key][11], data[key][12]
+                    w = x2 - x1
+                    h = y2 - y1
+                    ow = ox2 - ox1
+                    oh = oy2 - oy1
+                    if name != name:
+                        name = 1
+                    result_ori.append((str(video_id), str(int(frame)), str(mov + 1), str(name)))
+                    if roi_flag == True:
+                        if int(frame) > frame_count:
+                            frame = frame_count
+                        result.append((str(video_id), str(int(frame)), str(mov + 1), str(name), str(x1), str(y1), str(w), str(h), str(ox1), str(oy1), str(ow), str(oh)))
+                    else:    
+                        if len(delays[mov]) > 0:
+                            frame_delay = frame + sum(delays[mov])/len(delays[mov])
+                        else:
+                            frame_delay = last_frames[key]
+        
+                        if int(frame_delay) > frame_count:
+                            frame_delay = frame_count
+                        result.append((str(video_id), str(int(frame_delay)), str(mov + 1), str(name), str(x1), str(y1), str(w), str(h), str(ox1), str(oy1), str(ow), str(oh)))
+                csv_writer_processed.writerows(result)
+                csv_file_processed.close()
+                break
+            frame = cv2.imread(image_list.pop(0))
+            frame_count += 1
+            print(frame_count)
+            with torch.no_grad():
+                bboxes = get_boxes(frame)
+            if W is None or H is None:
+                (H, W) = frame.shape[:2]
+            boxes = []
+            confidences = []
+            classIDs = []
+            try:
+                for i, bbox in enumerate(bboxes):
+                    coor = np.array(bbox[:4], dtype=np.int32)
+                    score = bbox[4]
+                    class_ind = int(bbox[5])
+                    c1, c2 = (coor[0], coor[1]), (coor[2], coor[3])
+                    boxes.append([int(coor[0]), int(coor[1]), int(coor[2] - coor[0]), int(coor[3] - coor[1]), class_ind])
+                    confidences.append(float(score))
+                    classIDs.append(class_ind)
+            except:
+                print(frame_count)
+            idxs = list(range(len(boxes)))
+            dets = []
+            record = []
+            if len(idxs) > 0:
+                for i in idxs:
+                    (x, y) = (boxes[i][0], boxes[i][1])
+                    (w, h) = (boxes[i][2], boxes[i][3])
+                    class_ind = bboxes[i][5]
+                    if classes[class_ind] == 'car' or \
+                            classes[class_ind] == 'bus' or \
+                            classes[class_ind] == 'truck' or \
+                            classes[class_ind] == 'train':
+                        dets.append([x, y, x + w, y + h, confidences[i]])
+                        center_x = int(x + 0.5 * w)
+                        cneter_y = int(y + 0.5 * h)
+                        record.append((center_x, cneter_y, int(class_ind)))
+            np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
+            dets = np.asarray(dets)
+            #print(dets)
+            tracks = tracker.update(dets)
+            boxes = []
+            indexIDs = []
+            previous = prev.copy()
+            prev = {}
+            # memory = {}
+            for track in tracks:
+                boxes.append([track[0], track[1], track[2], track[3]])
+                indexIDs.append(int(track[4]))
+                prev[indexIDs[-1]] = boxes[-1]
+                memory.setdefault(indexIDs[-1], [])
+                memory[indexIDs[-1]].append(boxes[-1])
+            if len(boxes) > 0:
+                i = int(0)
+                for box in boxes:
+                    if indexIDs[i] in last_frames:
+                        if frame_count > last_frames[indexIDs[i]]:
+                            last_frames[indexIDs[i]] = frame_count
+                    (x, y) = (int(box[0]), int(box[1]))
+                    (w, h) = (int(box[2]), int(box[3]))
+                    center = (int(0), int(0))
+                    if indexIDs[i] in previous:
+                        previous_box = previous[indexIDs[i]]
+                        (x2, y2) = (int(previous_box[0]), int(previous_box[1]))
+                        (w2, h2) = (int(previous_box[2]), int(previous_box[3]))
+                        p0 = (int(x + (w - x) / 2), int(y + (h - y) / 2))
+                        p1 = (int(x2 + (w2 - x2) / 2), int(y2 + (h2 - y2) / 2))      
+                        for exit_num in range(num_exits):
+                            if intersect(p0, p1, exits[exit_num][0], exits[exit_num][1]):
+                                start_box = memory[indexIDs[i]][0]
+                                start_point = ((start_box[0] + start_box[2])/2, (start_box[1] + start_box[3])/2)
+                                end_point = p0
+                                vector = (end_point[0] - start_point[0], end_point[1] - start_point[1])
+
+
+                                mag_vector = np.linalg.norm(vector)
+                                mag_mov = np.linalg.norm(mov_vectors[0])
+                                cos_sim = np.dot(vector, mov_vectors[0]) / (mag_vector * mag_mov)
+                                if mag_mov > mag_vector:
+                                    mag_sim = mag_vector / mag_mov
+                                else:
+                                    mag_sim = mag_mov / mag_vector
+
+                                best_sim = 0.8 * cos_sim + 0.2 * mag_sim
+                                closest_mov = 0
+
+                                for mov_num in range(num_movs)[1:]:
+                                    mag_mov = np.linalg.norm(mov_vectors[mov_num])
+                                    cos_sim = np.dot(vector, mov_vectors[mov_num]) / (mag_vector * mag_mov)
+                                    if mag_mov > mag_vector:
+                                        mag_sim = mag_vector / mag_mov
+                                    else:
+                                        mag_sim = mag_mov / mag_vector
+
+                                    similarity = 0.8 * cos_sim + 0.2 * mag_sim
+                               
+                                    if similarity > best_sim:
+                                        closest_mov = mov_num
+                                        best_sim = similarity
+
                                 detect_flag = True
-                                flags[mov] = True
-                                indexids[mov] = indexIDs[i]
+                                flags[closest_mov] = True
+                                indexids[closest_mov] = indexIDs[i]
                                 last_frames[indexIDs[i]] = frame_count
                                 center = p0
-                                break
-                            if directions[mov] == 1 and x2 < x:
-                                detect_flag = True
-                                flags[mov] = True
-                                indexids[mov] = indexIDs[i]
-                                last_frames[indexIDs[i]] = frame_count
-                                center = p0
-                                break
-                            if directions[mov] == 2 and x2 > x:
-                                detect_flag = True
-                                flags[mov] = True
-                                indexids[mov] = indexIDs[i]
-                                last_frames[indexIDs[i]] = frame_count
-                                center = p0
-                                break
-                            if directions[mov] == 3 and y2 < y:
-                                detect_flag = True
-                                flags[mov] = True
-                                indexids[mov] = indexIDs[i]
-                                last_frames[indexIDs[i]] = frame_count
-                                center = p0
-                                break
-                            if directions[mov] == 4 and y2 > y:
-                                detect_flag = True
-                                flags[mov] = True
-                                indexids[mov] = indexIDs[i]
-                                last_frames[indexIDs[i]] = frame_count
-                                center = p0
-                                break
-                    for roi in range(roi_nums):
-                        if intersect(p0, p1, rois[roi][0], rois[roi][1]):
-                            if indexIDs[i] in data.keys():
-                                delays[data[indexIDs[i]][2]].append(frame_count - data[indexIDs[i]][1])
-                                data[indexIDs[i]][1] = frame_count
-                                data[indexIDs[i]][4] = True
-                i += 1
-                if detect_flag:
-                    name = '1'
-                    for x in record:
-                        d1 = x[0] - center[0]
-                        d2 = x[1] - center[1]
-                        dis = math.sqrt(d1 * d1 + d2 * d2)
-                        if dis < 10:
-                            name = classes[x[2]]
-                            if name == 'car' or name == 'bus':
-                                name = 1
-                            if name == 'truck' or name == 'train':
-                                name = 2
-                for mov in range(mov_nums):
-                    if flags[mov]:
-                        counts[mov] += 1
-                        roi_flag = False
-                        data[indexids[mov]] = [str(video_id), frame_count, mov, name, roi_flag, *box]
-                        break
-                detect_flag = False
-                for mov in range(mov_nums):
-                    flags[mov] = False
+                                
+                                
+                        for roi in range(roi_nums):
+                            if intersect(p0, p1, rois[roi][0], rois[roi][1]):
+                                if indexIDs[i] in data.keys():
+                                    delays[data[indexIDs[i]][2]].append(frame_count - data[indexIDs[i]][1]) # delays[mov].append(frame_count - frame)
+                                    data[indexIDs[i]][1] = frame_count
+                                    data[indexIDs[i]][4] = True
+                    if detect_flag:
+                        name = '1'
+                        for x in record:
+                            d1 = x[0] - center[0]
+                            d2 = x[1] - center[1]
+                            dis = math.sqrt(d1 * d1 + d2 * d2)
+                            if dis < 10:
+                                name = classes[x[2]]
+                                if name == 'car' or name == 'bus':
+                                    name = 1
+                                if name == 'truck' or name == 'train':
+                                    name = 2
+                    for mov in range(num_movs):
+                        if flags[mov]:
+                            counts[mov] += 1
+                            roi_flag = False
+                            data[indexids[mov]] = [str(video_id), frame_count, mov, name, roi_flag, *box, *memory[indexIDs[i]][0]]
+                            break
+                    detect_flag = False
+                    for mov in range(num_movs):
+                        flags[mov] = False
+                    i += 1
 
