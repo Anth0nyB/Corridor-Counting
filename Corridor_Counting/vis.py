@@ -9,34 +9,43 @@ from PIL import Image, ImageDraw
 # ---
 
 
-lines = [
-    [(65, 263), (110, 316)],
-    [(950, 866), (1278, 650)],
-    [(970, 181), (1096, 249)],
-    [(312, 138), (347, 124)]
+colors = [(200, 200, 100),
+          (200, 100, 200),
+          (0, 0, 200),
+          (0, 200, 0)
+          ]
+
+exits = [
+    [(), ()], # bottom left exit
+    [(), ()], # bottom right exit
+    [(), ()], # top right exit
+    [(), ()] # top left exit
 ]
 
 movements = [
-    [(90, 476), (1000, 189)], # bl straight
-    [(111, 408), (321, 126)], # bl left
-    [(100, 839), (1187, 723)], # bl right
-    [(111, 408), (79, 284)], # bl u-turn
-    [(1195, 515), (338, 132)], # br straight
-    [(1195, 515), (72, 286)], # br left
-    [(1173, 440), (1071, 220)], # br right
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-    [(), ()],
-]
+            [(), ()], # bl straight
+            [(), ()], # bl left
+            [(), ()], # bl right
+            [(), ()], # bl u-turn
+
+            [(), ()], # br straight
+            [(), ()], # br left
+            [(), ()], # br right
+            [(), ()], # br u-turn
+
+            [(), ()], # tr straight
+            [(), ()], # tr left
+            [(), ()], # tr right
+            [(), ()], # tr u-turn
+
+            [(), ()], # tl straight
+            [(), ()], # tl left
+            [(), ()], # tl right
+            [(), ()], # tl u-turn
+        ]   
+
+# mov_exits[i] = index of line in exits[] that movement[i] ends at
+mov_exits = [2, 3, 1, 0, 3, 0, 2, 1, 0, 1, 3, 2, 1, 2, 0, 3]
 
 
 # ---
@@ -48,11 +57,11 @@ def main(file_path: str):
     image = Image.fromarray(frame[:, :, ::-1])  # BGR to RGB
     draw = ImageDraw.Draw(image)
 
-    for line in lines:
+    for line in exits:
         draw.line(line, width=4, fill=200)
 
-    for mov in movements:
-        draw.line(mov, width=4, fill=(0, 0, 200))
+    for i, mov in enumerate(movements):
+        draw.line(mov, width=4, fill=colors[int(i/4)])
 
     image.show()
 
