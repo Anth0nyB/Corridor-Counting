@@ -25,6 +25,10 @@ COUNTING_COLUMNS = [
     "y_min",
     "width",
     "height",
+    "s_xmin",
+    "s_ymin",
+    "s_width",
+    "s_height"
 ]
 THRESHOLD = 50
 
@@ -38,8 +42,8 @@ def find_distance(vehicle, candidate) -> float:
 
 def find_universal_id(vehicle, all_detections) -> Optional[int]:
     candidate_vehicles = all_detections.loc[
-        (all_detections["camera_id"] == int(vehicle["video_id"])) &
-        (all_detections["frame_id"] == int(vehicle["frame_id"]))
+        (all_detections["camera_id"] == int(vehicle["video_id"])) & (
+        (all_detections["frame_id"] == int(vehicle["frame_id"])) | (all_detections["frame_id"] == int(vehicle["frame_id"]) + 1) | (all_detections["frame_id"] == int(vehicle["frame_id"]) - 1))
     ]
 
     result = None

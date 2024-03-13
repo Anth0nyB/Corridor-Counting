@@ -169,7 +169,7 @@ if __name__ == '__main__':
     print('all_clu:', len(clu))
     new_clu = list()
     for c_list in clu:
-        if len(c_list) <= 1: continue
+        # if len(c_list) <= 1: continue
         cam_list = [cid_tids[c][0] for c in c_list]
         if len(cam_list)!=len(set(cam_list)): continue
         new_clu.append([cid_tids[c] for c in c_list])
