@@ -112,7 +112,10 @@ def save_feature(output_path, data_path, pool_output):
         for image_path, feat in sample_dic.items():
             cam = image_path.split('/')[-3]
             image_name = image_path.split('/')[-1].split('.')[0]
-            all_feat_dic[cam][image_name]['feat'] = feat
+            try:
+                all_feat_dic[cam][image_name]['feat'] = feat
+            except:
+                print("Unable to find: ", image_path)
     for cam, feat_dic in all_feat_dic.items():
         if not os.path.isdir(os.path.join(output_path, cam)):
             os.makedirs(os.path.join(output_path, cam))

@@ -48,7 +48,7 @@ To run the full pipeline **_WIP_**
 ...
 ```
 
-Or if the outputs for the MTMCT and Counting modules are already generated, our algorithm can be ran the following commands.
+Or if the outputs for the MTMCT and Counting modules are already generated, our algorithm can be ran with the following commands.
 
 ```
 cd Corridor_Counting

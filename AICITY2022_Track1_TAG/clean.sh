@@ -1,4 +1,4 @@
-rm console.out
+# rm console.out
 cd datasets
 rm -r detect_reid1
 rm -r detect_reid2

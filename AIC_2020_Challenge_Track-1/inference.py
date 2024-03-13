@@ -121,7 +121,7 @@ if __name__=='__main__':
         for i in range(num_movs):
             delays.append([])
         # save output result of every video
-        csv_file_processed = open(os.path.join('.', output_path, '{}.csv'.format(video_id)), 'w')
+        csv_file_processed = open(os.path.join('.', output_path, '{}.csv'.format(video_id + 40)), 'w')
         csv_writer_processed = csv.writer(csv_file_processed)
         csv_writer_processed.writerow(['video_id', 'frame_id', 'movement_id', 'vehicle_class_id','xmin', 'ymin', 'width', 'height', 's_xmin', 's_ymin', 's_width', 's_height'])
         data = {}
@@ -211,7 +211,6 @@ if __name__=='__main__':
                         p1 = (int(x2 + (w2 - x2) / 2), int(y2 + (h2 - y2) / 2))      
                         for exit_num in range(num_exits):
                             if intersect(p0, p1, exits[exit_num][0], exits[exit_num][1]):
-                                print("exit on: ", exit_num)
                                 start_box = memory[indexIDs[i]][0]
                                 start_point = ((start_box[0] + start_box[2])/2, (start_box[1] + start_box[3])/2)
                                 end_point = p0
