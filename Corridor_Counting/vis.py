@@ -54,6 +54,7 @@ def main(file_path: str):
 
     for i, mov in enumerate(movements):
         draw.line(mov, width=4, fill=colors[int(i/4)])
+        draw.ellipse([(mov[1][0] - 10, mov[1][1] - 10), (mov[1][0] + 10, mov[1][1] + 10)], width=1, fill=colors[int(i/4)])
 
     image.show()
 
