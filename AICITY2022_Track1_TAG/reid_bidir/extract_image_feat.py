@@ -18,7 +18,7 @@ sys.path.append('../')
 from config import cfg
 
 BATCH_SIZE = 256
-NUM_PROCESS = 1
+NUM_PROCESS = int(os.environ.get('SLURM_NTASKS', 1))
 def chunks(l):
     return [l[i:i+BATCH_SIZE] for i in range(0, len(l), BATCH_SIZE)]
 
