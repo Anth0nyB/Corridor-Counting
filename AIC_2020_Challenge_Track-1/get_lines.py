@@ -44,7 +44,7 @@ def get_exits(cam_id):
 
     elif cam_id == 42:
         exits = [
-            [(18, 288), (49, 452)], # bottom left exit
+            [(25, 288), (49, 452)], # bottom left exit
             [(850, 960), (1150, 725)], # bottom right exit
             [(1009, 208), (875, 140)], # top right exit
             [(357, 124), (298, 197)] # top left exit
