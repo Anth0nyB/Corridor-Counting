@@ -17,7 +17,8 @@ def merge_feat(_cfg):
     ensemble_list = ['detect_reid1', 'detect_reid2', 'detect_reid3']
     all_feat_dir = _cfg.DATA_DIR.split('detect')[0]
 
-    for cam in ['c041', 'c042', 'c043', 'c044', 'c045', 'c046']:
+    all_cams = os.listdir(_cfg.DATA_DIR)
+    for cam in all_cams:
         feat_dic_list = []
         for feat_mode in ensemble_list:
             feat_pkl_file = os.path.join(all_feat_dir, feat_mode, cam,

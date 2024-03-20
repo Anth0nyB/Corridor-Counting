@@ -254,7 +254,7 @@ if __name__ == '__main__':
     opt = parser.parse_args()
     cfg.merge_from_file(f'../../config/{opt.cfg_file}')
     cfg.freeze()
-    opt.source = f'{cfg.DET_SOURCE_DIR}/{opt.name}/img1/'
+    opt.source = f'{cfg.DET_SOURCE_DIR}/{opt.name}/'
     opt.project = cfg.DATA_DIR
     print(opt)
     # check_requirements()
