@@ -58,6 +58,6 @@ def draw_ignore_regions(img, region):
 if __name__ == '__main__':
     cfg.merge_from_file(f'../config/{sys.argv[1]}')
     cfg.freeze()
-    preprocess(src_root=f'{cfg.CHALLENGE_DATA_DIR}',
-               dst_root=f'{cfg.DET_SOURCE_DIR}')
+    preprocess(src_root=f'../{cfg.CHALLENGE_DATA_DIR}',
+               dst_root=f'../{cfg.DET_SOURCE_DIR}'.split("validation")[0])
     print('Done')

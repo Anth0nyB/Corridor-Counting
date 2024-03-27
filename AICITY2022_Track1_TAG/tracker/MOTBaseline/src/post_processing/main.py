@@ -14,7 +14,7 @@ from config import cfg
 def load_raw_mot(seq, mcmt_cfg):
     """Load pickle to speed up."""
 
-    mot_feat_dic = pickle.load(open(f'{mcmt_cfg.DATA_DIR}/{seq}/{seq}_mot_feat_raw.pkl', 'rb'))
+    mot_feat_dic = pickle.load(open(f'../../../../{mcmt_cfg.DATA_DIR}/{seq}/{seq}_mot_feat_raw.pkl', 'rb'))
     results = []
     for image_name in sorted(list(mot_feat_dic.keys())):
         feat_dic = mot_feat_dic[image_name]
@@ -35,7 +35,7 @@ def eval_seq(seq, pp='', split='train', mcmt_cfg=None):
     else:
         use_pp = False
         print('NO post processing')
-    trk_file = f'{mcmt_cfg.DATA_DIR}/{seq}/{seq}_mot.txt'
+    trk_file = f'../../../../{mcmt_cfg.DATA_DIR}/{seq}/{seq}_mot.txt'
     print('loading tracked file ' + trk_file)
     # results = np.loadtxt(trk_file, delimiter=',')
     results = load_raw_mot(seq, mcmt_cfg)
@@ -88,7 +88,7 @@ def eval_seq(seq, pp='', split='train', mcmt_cfg=None):
 def save_pickle(results, sequence_name, mcmt_cfg):
     """Save pickle."""
 
-    feat_pkl_file = f'{mcmt_cfg.DATA_DIR}/{sequence_name}/{sequence_name}_mot_feat.pkl'
+    feat_pkl_file = f'../../../../{mcmt_cfg.DATA_DIR}/{sequence_name}/{sequence_name}_mot_feat.pkl'
     mot_feat_dic = {}
     for row in results:
         [fid, pid, x, y, w, h] = row[:6]    # pylint: disable=invalid-name

@@ -16,9 +16,9 @@ def get_sim_matrix(_cfg,cid_tid_dict,cid_tids):
     # sim_matrix = np.matmul(q_arr, g_arr.T)
 
     # st mask
-    st_mask = np.ones((count, count), dtype=np.float32)
-    st_mask = intracam_ignore(st_mask, cid_tids)
-    st_mask = st_filter(st_mask, cid_tids, cid_tid_dict)
+    # st_mask = np.ones((count, count), dtype=np.float32)
+    # st_mask = intracam_ignore(st_mask, cid_tids)
+    # st_mask = st_filter(st_mask, cid_tids, cid_tid_dict)
 
     # visual rerank
     visual_sim_matrix = visual_rerank(q_arr, g_arr, cid_tids, _cfg)
@@ -26,7 +26,7 @@ def get_sim_matrix(_cfg,cid_tid_dict,cid_tids):
     print(visual_sim_matrix)
     # merge result
     np.set_printoptions(precision=3)
-    sim_matrix = visual_sim_matrix * st_mask
+    sim_matrix = visual_sim_matrix #* st_mask
 
     # sim_matrix[sim_matrix < 0] = 0
     np.fill_diagonal(sim_matrix, 0)
@@ -96,46 +96,53 @@ def combin_feature(cid_tid_dict,sub_cluster):
 
 def get_labels(_cfg, cid_tid_dict, cid_tids, score_thr):
     # 1st cluster
-    sub_cid_tids = subcam_list(cid_tid_dict,cid_tids)
-    sub_labels = dict()
+    # sub_cid_tids = subcam_list(cid_tid_dict,cid_tids)
+    # sub_labels = dict()
     dis_thrs = [0.7,0.5,0.5,0.5,0.5,
                 0.7,0.5,0.5,0.5,0.5]
-    for i,sub_c_to_c in enumerate(sub_cid_tids):
-        sim_matrix = get_sim_matrix(_cfg,cid_tid_dict,sub_cid_tids[sub_c_to_c])
-        cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs[i], metric='precomputed',
-                                linkage='complete').fit_predict(1 - sim_matrix)
-        labels = get_match(cluster_labels)
-        cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
-        sub_labels[sub_c_to_c] = cluster_cid_tids
-    print("old tricklets:{}".format(len(cid_tids)))
-    labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
+    # for i,sub_c_to_c in enumerate(sub_cid_tids):
+    # for i,cid_tid in enumerate(cid_tids):
+        # sim_matrix = get_sim_matrix(_cfg,cid_tid_dict,sub_cid_tids[sub_c_to_c])
+    cams_list = sorted(set([cid_tid[0] for cid_tid in cid_tids]))
+    sim_matrix = get_sim_matrix(_cfg,cid_tid_dict, list(cid_tid_dict.keys()))
+    cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs[1], metric='precomputed',
+                            linkage='complete').fit_predict(1 - sim_matrix)
+    labels = get_match(cluster_labels)
+    print(type(labels))
+    # cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
+    cluster_cid_tids = get_cid_tid(labels,list(cid_tid_dict.keys()))
+    # sub_labels[sub_c_to_c] = cluster_cid_tids
+    
+    # sub_labels[cid_tid] = cluster_cid_tids
+    # print("old tricklets:{}".format(len(cid_tids)))
+    # labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
 
     # 2ed cluster
-    cid_tid_dict_new = combin_feature(cid_tid_dict, sub_cluster)
-    sub_cid_tids = subcam_list2(cid_tid_dict_new,cid_tids)
-    sub_labels = dict()
-    for i,sub_c_to_c in enumerate(sub_cid_tids):
-        sim_matrix = get_sim_matrix(_cfg,cid_tid_dict_new,sub_cid_tids[sub_c_to_c])
-        cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs[i], metric='precomputed',
-                                linkage='complete').fit_predict(1 - sim_matrix)
-        labels = get_match(cluster_labels)
-        cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
-        sub_labels[sub_c_to_c] = cluster_cid_tids
-    print("old tricklets:{}".format(len(cid_tids)))
-    labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
+    # cid_tid_dict_new = combin_feature(cid_tid_dict, sub_cluster)
+    # sub_cid_tids = subcam_list2(cid_tid_dict_new,cid_tids)
+    # sub_labels = dict()
+    # for i,sub_c_to_c in enumerate(sub_cid_tids):
+    #     sim_matrix = get_sim_matrix(_cfg,cid_tid_dict_new,sub_cid_tids[sub_c_to_c])
+    #     cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs[i], metric='precomputed',
+    #                             linkage='complete').fit_predict(1 - sim_matrix)
+    #     labels = get_match(cluster_labels)
+    #     cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
+    #     sub_labels[sub_c_to_c] = cluster_cid_tids
+    # print("old tricklets:{}".format(len(cid_tids)))
+    # labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
 
-    cid_tid_dict_new = combin_feature(cid_tid_dict, sub_cluster)
-    sub_cid_tids = subcam_list2(cid_tid_dict_new,cid_tids)
-    sub_labels = dict()
-    for i,sub_c_to_c in enumerate(sub_cid_tids):
-        sim_matrix = get_sim_matrix(_cfg,cid_tid_dict_new,sub_cid_tids[sub_c_to_c])
-        cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-0.1, metric='precomputed',
-                                linkage='complete').fit_predict(1 - sim_matrix)
-        labels = get_match(cluster_labels)
-        cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
-        sub_labels[sub_c_to_c] = cluster_cid_tids
-    print("old tricklets:{}".format(len(cid_tids)))
-    labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
+    # cid_tid_dict_new = combin_feature(cid_tid_dict, sub_cluster)
+    # sub_cid_tids = subcam_list2(cid_tid_dict_new,cid_tids)
+    # sub_labels = dict()
+    # for i,sub_c_to_c in enumerate(sub_cid_tids):
+    #     sim_matrix = get_sim_matrix(_cfg,cid_tid_dict_new,sub_cid_tids[sub_c_to_c])
+    #     cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-0.1, metric='precomputed',
+    #                             linkage='complete').fit_predict(1 - sim_matrix)
+    #     labels = get_match(cluster_labels)
+    #     cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
+    #     sub_labels[sub_c_to_c] = cluster_cid_tids
+    # print("old tricklets:{}".format(len(cid_tids)))
+    # labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
 
     # # 3rd cluster
     # cid_tid_dict_new = combin_feature(cid_tid_dict,sub_cluster)
@@ -143,14 +150,16 @@ def get_labels(_cfg, cid_tid_dict, cid_tids, score_thr):
     # cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1, affinity='precomputed',
     #                                          linkage='complete').fit_predict(1 - sim_matrix)
     # labels = get_match(cluster_labels)
-    return labels
+    return cluster_cid_tids
 
 if __name__ == '__main__':
     cfg.merge_from_file(f'../../../config/{sys.argv[1]}')
     cfg.freeze()
-    scene_name = ['S06']
-    scene_cluster = [[41, 42, 43, 44, 45, 46]]
-    fea_dir = './exp/viz/test/S06/trajectory/'
+    scene_name = ['S05']
+    cams = os.listdir(opj("../../..", cfg.DATA_DIR))
+    cams = list(filter(lambda x: 'c' in x, cams))
+    scene_cluster = [[int(x[1:]) for x in cams]]
+    fea_dir = './exp/viz/validation/S05/trajectory/'
     cid_tid_dict = dict()
 
     for pkl_path in os.listdir(fea_dir):
@@ -165,20 +174,24 @@ if __name__ == '__main__':
 
 
     cid_tids = sorted([key for key in cid_tid_dict.keys() if key[0] in scene_cluster[0]])
+    
     clu = get_labels(cfg,cid_tid_dict,cid_tids,score_thr=cfg.SCORE_THR)
     print('all_clu:', len(clu))
+    print(clu)
+    # Remove any vehicles with too many or too few cameras appeared on
     new_clu = list()
-    for c_list in clu:
-        # if len(c_list) <= 1: continue
-        cam_list = [cid_tids[c][0] for c in c_list]
+    for cid_tid_list in clu:
+        # if len(cid_tid_list) <= 1: continue
+        cam_list = [cid_tid[0] for cid_tid in cid_tid_list]
         if len(cam_list)!=len(set(cam_list)): continue
-        new_clu.append([cid_tids[c] for c in c_list])
+        new_clu.append([cid_tid for cid_tid in cid_tid_list])
     print('new_clu: ', len(new_clu))
 
     all_clu = new_clu
+    print(all_clu)
 
     cid_tid_label = dict()
-    for i, c_list in enumerate(all_clu):
-        for c in c_list:
-            cid_tid_label[c] = i + 1
+    for i, cid_tid_list in enumerate(all_clu):
+        for cid_tid in cid_tid_list:
+            cid_tid_label[cid_tid] = i + 1
     pickle.dump({'cluster': cid_tid_label}, open('test_cluster.pkl', 'wb'))

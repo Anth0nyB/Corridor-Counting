@@ -15,9 +15,9 @@ def merge_feat(_cfg):
 
     # NOTE: modify the ensemble list here
     ensemble_list = ['detect_reid1', 'detect_reid2', 'detect_reid3']
-    all_feat_dir = _cfg.DATA_DIR.split('detect')[0]
+    all_feat_dir = os.path.join("..", _cfg.DATA_DIR).split('detect')[0]
 
-    all_cams = os.listdir(_cfg.DATA_DIR)
+    all_cams = os.listdir(os.path.join("..", _cfg.DATA_DIR))
     for cam in all_cams:
         feat_dic_list = []
         for feat_mode in ensemble_list:

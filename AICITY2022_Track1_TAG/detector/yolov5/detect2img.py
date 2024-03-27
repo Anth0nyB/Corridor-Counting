@@ -254,8 +254,8 @@ if __name__ == '__main__':
     opt = parser.parse_args()
     cfg.merge_from_file(f'../../config/{opt.cfg_file}')
     cfg.freeze()
-    opt.source = f'{cfg.DET_SOURCE_DIR}/{opt.name}/'
-    opt.project = cfg.DATA_DIR
+    opt.source = f'../../{cfg.DET_SOURCE_DIR}/{opt.name}/'
+    opt.project = f'../../{cfg.DATA_DIR}'
     print(opt)
     # check_requirements()
 
@@ -267,8 +267,8 @@ if __name__ == '__main__':
         else:
             detect()
 
-    path = os.path.join(cfg.DATA_DIR, opt.name, 'dets_debug')
-    out = cv2.VideoWriter(os.path.join(cfg.DATA_DIR, opt.name, "dets_debug.mp4"), cv2.VideoWriter_fourcc(*"mp4v"), 25.0, (1280, 960))
+    path = os.path.join("../..", cfg.DATA_DIR, opt.name, 'dets_debug')
+    out = cv2.VideoWriter(os.path.join("../..", cfg.DATA_DIR, opt.name, "dets_debug.mp4"), cv2.VideoWriter_fourcc(*"mp4v"), 25.0, (1280, 960))
     files = os.listdir(path)
     files.sort()
     for file in files:

@@ -1,9 +1,9 @@
-CHALLENGE_DATA_DIR: "${MTMCT_ROOT}/datasets/Dataset_A"
-DET_SOURCE_DIR: "${MTMCT_ROOT}/datasets/detection/images/test/S06/"
-DATA_DIR: "${MTMCT_ROOT}/datasets/detect/"
+CHALLENGE_DATA_DIR: "datasets/Dataset_A"
+DET_SOURCE_DIR: "datasets/detection/validation/S05"
+DATA_DIR: "datasets/detect/"
 REID_SIZE_TEST: [384, 384]
-ROI_DIR: "${MTMCT_ROOT}/datasets/Dataset_A/test/S06/"
-CID_BIAS_DIR: "${MTMCT_ROOT}/datasets/Dataset_A/cam_timestamp/"
+ROI_DIR: "datasets/Dataset_A/validation/S05"
+CID_BIAS_DIR: "datasets/Dataset_A/cam_timestamp/"
 USE_RERANK: True
 USE_FF: True
 SCORE_THR: 0.1

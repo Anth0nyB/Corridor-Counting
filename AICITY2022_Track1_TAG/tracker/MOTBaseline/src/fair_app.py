@@ -277,7 +277,7 @@ def save_pickle(output_file, results, sequence_name, mcmt_cfg):
 
     # if not os.path.exists(mot_image_dir):
     #     os.makedirs(mot_image_dir)
-    feat_pkl_file = f'{mcmt_cfg.DATA_DIR}/{sequence_name}/{sequence_name}_mot_feat_raw.pkl'
+    feat_pkl_file = f'../../../{mcmt_cfg.DATA_DIR}/{sequence_name}/{sequence_name}_mot_feat_raw.pkl'
     mot_feat_dic = {}
     for row in results:
         [fid, pid, x, y, w, h] = row[:6]    # pylint: disable=invalid-name
@@ -339,10 +339,10 @@ if __name__ == "__main__":
     args = parse_args()
     cfg.merge_from_file(f'../../../config/{args.cfg_file}')
     cfg.freeze()
-    args.sequence_dir = os.path.join(cfg.DET_SOURCE_DIR, args.seq_name)
-    args.detection_file = os.path.join(cfg.DATA_DIR, args.seq_name,
+    args.sequence_dir = os.path.join("../../..", cfg.DET_SOURCE_DIR, args.seq_name)
+    args.detection_file = os.path.join("../../..", cfg.DATA_DIR, args.seq_name,
                                        f'{args.seq_name}_dets_feat.pkl')
-    args.output_file = os.path.join(cfg.DATA_DIR, args.seq_name,
+    args.output_file = os.path.join("../../..", cfg.DATA_DIR, args.seq_name,
                                     f'{args.seq_name}_mot.txt')
 
     run(

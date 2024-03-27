@@ -7,7 +7,8 @@ import sys
 sys.path.append('../../../')
 from config import cfg
 
-def parse_pt(pt_file,zones):
+# def parse_pt(pt_file,zones):
+def parse_pt(pt_file):
     if not os.path.isfile(pt_file):
         return dict()
     with open(pt_file,'rb') as f:
@@ -20,7 +21,7 @@ def parse_pt(pt_file,zones):
         if tid not in mot_list:
             mot_list[tid] = dict()
         out_dict = lines[line]
-        out_dict['zone'], out_dict['sub_zone']  = zones.get_zone(bbox)
+        # out_dict['zone'], out_dict['sub_zone']  = zones.get_zone(bbox)
         mot_list[tid][fid] = out_dict
     return mot_list
 
@@ -47,16 +48,16 @@ def out_new_mot(mot_list,mot_path):
 if __name__ == '__main__':
     cfg.merge_from_file(f'../../../config/{sys.argv[1]}')
     cfg.freeze()
-    scene_name = ['S06']
-    data_dir = cfg.DATA_DIR
-    save_dir = './exp/viz/test/S06/trajectory/'
-    cid_bias = parse_bias(cfg.CID_BIAS_DIR, scene_name)
+    scene_name = ['S05']
+    data_dir = opj("../../..", cfg.DATA_DIR)
+    save_dir = './exp/viz/validation/S05/trajectory/'
+    cid_bias = parse_bias(opj("../../..", cfg.CID_BIAS_DIR), scene_name)
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     cam_paths = os.listdir(data_dir)
     cam_paths = list(filter(lambda x: 'c' in x, cam_paths))
     cam_paths.sort()
-    zones = zone()
+    # zones = zone()
 
     for cam_path in cam_paths:
         print('processing {}...'.format(cam_path))
@@ -66,79 +67,79 @@ if __name__ == '__main__':
         mot_path = opj(data_dir, cam_path,'{}_mot_feat.pkl'.format(cam_path))
         new_mot_path = opj(data_dir, cam_path, '{}_mot_feat_break.pkl'.format(cam_path))
         print(new_mot_path)
-        zones.set_cam(cid)
-        mot_list = parse_pt(mot_path,zones)
-        mot_list = zones.break_mot(mot_list, cid)
-        # mot_list = zones.comb_mot(mot_list, cid)
-        mot_list = zones.filter_mot(mot_list, cid) # filter by zone
-        mot_list = zones.filter_bbox(mot_list, cid)  # filter bbox
+        # zones.set_cam(cid)
+        # mot_list = parse_pt(mot_path,zones)
+        mot_list = parse_pt(mot_path)
+        # mot_list = zones.break_mot(mot_list, cid)
+        # # mot_list = zones.comb_mot(mot_list, cid)
+        # mot_list = zones.filter_mot(mot_list, cid) # filter by zone
+        # mot_list = zones.filter_bbox(mot_list, cid)  # filter bbox
         out_new_mot(mot_list, new_mot_path)
         tid_data = dict()
-        if cid in [41,43,46,42,44,45]:
-            for tid in mot_list:
-                tracklet = mot_list[tid]
-                # if len(tracklet) <= 1: continue
+        for tid in mot_list:
+            tracklet = mot_list[tid]
+            # if len(tracklet) <= 1: continue
 
-                frame_list = list(tracklet.keys())
-                frame_list.sort()
-                # if tid==11 and cid==44:
-                #     print(tid)
-                zone_list = [tracklet[f]['zone'] for f in frame_list]
-                sub_zone_list = [tracklet[f]['sub_zone'] for f in frame_list]
+            frame_list = list(tracklet.keys())
+            frame_list.sort()
+            # if tid==11 and cid==44:
+            #     print(tid)
+            # zone_list = [tracklet[f]['zone'] for f in frame_list]
+            # sub_zone_list = [tracklet[f]['sub_zone'] for f in frame_list]
 
-                # feature_list = []
-                # bsize_list = []
-                # bsize_sum = 0
-                # for f in frame_list:
-                #     bsize = (tracklet[f]['bbox'][3]-tracklet[f]['bbox'][1])*(tracklet[f]['bbox'][2]-tracklet[f]['bbox'][0])
-                #     # if bsize > 2000:
-                #     #     feature_list.append(tracklet[f]['feat'])
-                #     #     bsize_list.append(bsize)
-                #     #     bsize_sum += bsize
-                # if len(feature_list) < 2:
-                #     feature_list = [tracklet[f]['feat'] for f in frame_list]
-                #     bsize_list = [(tracklet[f]['bbox'][3]-tracklet[f]['bbox'][1])*(tracklet[f]['bbox'][2]-tracklet[f]['bbox'][0]) for f in frame_list]
-                #     bsize_sum = np.sum(bsize_list)
-                
-                # all_feat = np.array(feature_list)
-                # mean_feat = np.zeros((2048,))
-                # for i in range(all_feat.shape[0]):
-                #     mean_feat += all_feat[i,:] * bsize_list[i] / bsize_sum 
+            # feature_list = []
+            # bsize_list = []
+            # bsize_sum = 0
+            # for f in frame_list:
+            #     bsize = (tracklet[f]['bbox'][3]-tracklet[f]['bbox'][1])*(tracklet[f]['bbox'][2]-tracklet[f]['bbox'][0])
+            #     # if bsize > 2000:
+            #     #     feature_list.append(tracklet[f]['feat'])
+            #     #     bsize_list.append(bsize)
+            #     #     bsize_sum += bsize
+            # if len(feature_list) < 2:
+            #     feature_list = [tracklet[f]['feat'] for f in frame_list]
+            #     bsize_list = [(tracklet[f]['bbox'][3]-tracklet[f]['bbox'][1])*(tracklet[f]['bbox'][2]-tracklet[f]['bbox'][0]) for f in frame_list]
+            #     bsize_sum = np.sum(bsize_list)
+            
+            # all_feat = np.array(feature_list)
+            # mean_feat = np.zeros((2048,))
+            # for i in range(all_feat.shape[0]):
+            #     mean_feat += all_feat[i,:] * bsize_list[i] / bsize_sum 
 
-                # for f in frame_list:
-                #     bsize = (tracklet[f]['bbox'][3]-tracklet[f]['bbox'][1])*(tracklet[f]['bbox'][2]-tracklet[f]['bbox'][0])
-                #     if bsize < 1000:
-                #         print(bsize)
+            # for f in frame_list:
+            #     bsize = (tracklet[f]['bbox'][3]-tracklet[f]['bbox'][1])*(tracklet[f]['bbox'][2]-tracklet[f]['bbox'][0])
+            #     if bsize < 1000:
+            #         print(bsize)
 
-                feature_list = [tracklet[f]['feat'] for f in frame_list if (tracklet[f]['bbox'][3]-tracklet[f]['bbox'][1])*(tracklet[f]['bbox'][2]-tracklet[f]['bbox'][0])>2000]
-                if len(feature_list)<2:
-                    feature_list = [tracklet[f]['feat'] for f in frame_list]
+            feature_list = [tracklet[f]['feat'] for f in frame_list if (tracklet[f]['bbox'][3]-tracklet[f]['bbox'][1])*(tracklet[f]['bbox'][2]-tracklet[f]['bbox'][0])>2000]
+            if len(feature_list)<2:
+                feature_list = [tracklet[f]['feat'] for f in frame_list]
 
-                # if len(feature_list)>10:
-                #     from sklearn.neighbors import LocalOutlierFactor
-                #     clf = LocalOutlierFactor(n_neighbors=5)
-                #     y_pred_s = clf.fit_predict(np.array([feat for feat in feature_list]))
-                #     new_feature_list = []
-                #     for i, y in enumerate(y_pred_s.tolist()):
-                #         if y != -1:
-                #             new_feature_list.append(feature_list[i])
-                #     feature_list = new_feature_list
+            # if len(feature_list)>10:
+            #     from sklearn.neighbors import LocalOutlierFactor
+            #     clf = LocalOutlierFactor(n_neighbors=5)
+            #     y_pred_s = clf.fit_predict(np.array([feat for feat in feature_list]))
+            #     new_feature_list = []
+            #     for i, y in enumerate(y_pred_s.tolist()):
+            #         if y != -1:
+            #             new_feature_list.append(feature_list[i])
+            #     feature_list = new_feature_list
 
-                all_feat = np.array([feat for feat in feature_list])
-                mean_feat = np.mean(all_feat, axis=0)
-                io_time = [cur_bias + frame_list[0] / 10., cur_bias + frame_list[-1] / 10.]
+            all_feat = np.array([feat for feat in feature_list])
+            mean_feat = np.mean(all_feat, axis=0)
+            io_time = [cur_bias + frame_list[0] / 10., cur_bias + frame_list[-1] / 10.]
 
 
-                tid_data[tid]={
-                    'cam': cid,
-                    'tid': tid,
-                    'mean_feat': mean_feat,
-                    'zone_list':zone_list,
-                    'sub_zone_list':sub_zone_list,
-                    'frame_list': frame_list,
-                    'tracklet': tracklet,
-                    'io_time': io_time
-                }
+            tid_data[tid]={
+                'cam': cid,
+                'tid': tid,
+                'mean_feat': mean_feat,
+                # 'zone_list':zone_list,
+                # 'sub_zone_list':sub_zone_list,
+                'frame_list': frame_list,
+                'tracklet': tracklet,
+                'io_time': io_time
+            }
 
         pickle.dump(tid_data,f_w)
         f_w.close()

@@ -34,8 +34,8 @@ def show_res(map_tid):
 if __name__ == '__main__':
     cfg.merge_from_file(f'../../../config/{sys.argv[1]}')
     cfg.freeze()
-    data_dir = cfg.DATA_DIR
-    roi_dir = cfg.ROI_DIR
+    data_dir = opj("../../..", cfg.DATA_DIR)
+    roi_dir = opj("../../..", cfg.ROI_DIR)
 
     map_tid = pickle.load(open('test_cluster.pkl', 'rb'))['cluster']
     show_res(map_tid)

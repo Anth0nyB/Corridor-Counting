@@ -1,5 +1,6 @@
 import numpy as np
 from tqdm import tqdm
+import os
 import sys
 sys.path.append('../../../')
 from config import cfg
@@ -17,12 +18,14 @@ def write_results_score(filename, results):
             f.write(line)
 
 #〈camera_id〉〈obj_id〉〈frame_id〉〈xmin〉〈ymin〉〈width〉〈height〉〈xworld〉〈yworld〉
-def dti(txt_path, save_path, n_min=25, n_dti=20):
+def dti(txt_path, save_path, cam_path, n_min=25, n_dti=20):
     inter_boxes = []
     log = open('log.txt','w')
     seq_info = np.loadtxt(txt_path, dtype=np.float64, delimiter=' ')
     camera_pools = {}
-    for ind in range(41, 47):
+    cam_nums = os.listdir(cam_path)
+    cam_nums = [int(cam[-3:]) for cam in cam_nums]
+    for ind in cam_nums:
         index = (seq_info[:, 0] == ind)
         camera_pools[ind] = seq_info[index]
     
@@ -93,7 +96,7 @@ def dti(txt_path, save_path, n_min=25, n_dti=20):
 if __name__ == '__main__':
     cfg.merge_from_file(f'../../../config/{sys.argv[1]}')
     cfg.freeze()
-    data_dir = cfg.DATA_DIR
+    data_dir = os.path.join("../../..", cfg.DATA_DIR)
     txt_path = cfg.MCMT_OUTPUT_TXT
     save_path = cfg.MCMT_Interpo_OUTPUT_TXT
-    inter_boxes = dti(txt_path, save_path, n_min=5, n_dti=300)
+    inter_boxes = dti(txt_path, save_path, data_dir, n_min=5, n_dti=300)

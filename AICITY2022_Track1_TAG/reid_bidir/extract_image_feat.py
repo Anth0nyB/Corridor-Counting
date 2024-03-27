@@ -127,7 +127,7 @@ def save_feature(output_path, data_path, pool_output):
 def extract_image_feat(_cfg):
     """Extract reid feat for each image, using multiprocessing."""
 
-    image_list = load_all_data(_cfg.DET_IMG_DIR)
+    image_list = load_all_data(os.path.join("..", _cfg.DET_IMG_DIR))
     chunk_list = chunks(image_list)
 
     num_process = NUM_PROCESS
@@ -150,7 +150,7 @@ def extract_image_feat(_cfg):
     #     ret = process_input_by_worker_process(sub_list)
     print('%.4f s' % (time.time() - start_time))
 
-    save_feature(_cfg.DATA_DIR, _cfg.DET_IMG_DIR, pool_output)
+    save_feature(os.path.join("..", _cfg.DATA_DIR), os.path.join("..", _cfg.DET_IMG_DIR), pool_output)
 
 
 def debug_reid_feat(_cfg):

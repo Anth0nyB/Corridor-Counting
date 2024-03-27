@@ -1,7 +1,6 @@
 
 cd src
-seqs=(c041 c042 c043 c044 c045 c046)
-# seqs=(c041)
+seqs=(c010 c016 c017 c018 c019 c020 c021 c022 c023 c024 c025 c026 c027 c028 c029 c033 c034 c035 c036)
 
 TrackOneSeq(){
     seq=$1
