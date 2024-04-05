@@ -12,7 +12,7 @@ Make use of `virtualenv` to set up the environments for each module.
 pip install virtualenv
 ```
 
-### Counting Module
+### Counting Module (likely to be replaced)
 
 To set up the counting module use the following commands.
 
@@ -24,7 +24,8 @@ pip install -r requirements.txt
 deactivate
 ```
 
-Follow the instructions in `AIC_2020_Challenge_Track-1/README.md` to download the inference model _best.pt_. NOTE: Don't download any datasets.
+Follow the instructions in `AIC_2020_Challenge_Track-1/README.md` to download the inference model _best.pt_.
+NOTE: Don't download any datasets.
 
 ### MTMCT Module
 
@@ -38,21 +39,52 @@ pip install -r detector/yolov5/requirements.txt
 deactivate
 ```
 
-Follow the instructions in `AICITY2022_Track1_TAG/README.md` to download the already trained ReID models and the detection model _yolov5x.pt_. NOTE: Don't download any datasets and you don't need to run `bash gen_det.sh aic.yml`.
+Follow the instructions in `AICITY2022_Track1_TAG/README.md` to download the already trained ReID models and the detection model _yolov5x.pt_.
+NOTE: Don't download any datasets and you don't need to run `bash gen_det.sh aic.yml`.
 
 ## Running our solution
 
-To run the full pipeline **_WIP_**
+You can either run the full pipeline, or if some results have already been generated you can run the appropritate components.
+
+### Run the full pipeline
 
 ```
-...
+sbatch run.sh
 ```
 
-Or if the outputs for the MTMCT and Counting modules are already generated, our algorithm can be ran with the following commands.
+### Run the components individually
+
+_This assumes you have access to GPU's such as with an interactive job._
+
+First load the environment.
 
 ```
-cd Corridor_Counting
+source AICITY2022_Track1_TAG/venv/bin/activate
 module load Python
 module load GCC
-python vehicle_matching.py ../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/track1.txt ../AIC_2020_Challenge_Track-1/track1.txt
+```
+
+Extract frames from the videos.
+
+```
+python AICITY2022_Track1_TAG/detector/gen_images_aic.py aic.yml
+```
+
+Perform detection on the extracted frames.
+
+```
+bash AICITY2022_Track1_TAG/detector/yolov5/gen_det.sh aic.yml
+```
+
+Run Multi Camera Multi Vehicle Tracking to get universal id's.
+
+```
+bash AICITY2022_Track1_TAG/MCMVT.sh
+```
+
+Get the vehicle movements and link them to the universal id's.
+NOTE: You may need to deactivate the virtual environment. If so, use `deactivate`.
+
+```
+python Corridor_Counting/assign_movements.py
 ```

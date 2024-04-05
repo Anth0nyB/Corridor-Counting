@@ -14,9 +14,10 @@
 #SBATCH --mail-user=<user_email>
 #SBATCH --mail-type=END
 
+cd AICITY2022_Track1_TAG
 source venv/bin/activate
 module load Python
-module load GCC/12.3.0
+module load GCC
 
 cd detector
 python gen_images_aic.py aic.yml
@@ -28,3 +29,6 @@ cd ../..
 bash MCMVT.sh
 
 deactivate
+
+cd ../Corridor_Counting
+python assign_movements.py
