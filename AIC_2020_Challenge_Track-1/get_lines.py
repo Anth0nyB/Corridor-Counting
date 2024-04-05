@@ -32,9 +32,57 @@ def get_exits(cam_id):
     """ Gives the lines marking where vehicles exit the intersection.
         These values are hardcoded on a per intersection basis """
     
-    print("using exits from cam: ", cam_id)
-
-    if cam_id == 41:
+    # print("using exits from cam: ", cam_id)
+    
+    if cam_id == 10:
+        exits = [
+            [(850, 200), (1100, 200)],  # top exit
+            [(150, 900), (900, 900)],  # bottom exit
+        ]
+    
+    elif cam_id == 16:
+        exits = [
+            [(450, 450), (1420, 450)],  # middle exit
+        ]
+        
+    elif cam_id == 17:
+        exits = [
+            [(360, 500), (1500, 500)],  # middle exit
+        ]
+        
+    elif cam_id == 18:
+        exits = [
+            [(1300, 1100), (2060, 1530)],  # middle exit
+        ]
+        
+    elif cam_id == 20:
+        exits = [
+            [(587, 1037), (1246, 746)],  # middle exit
+        ]
+        
+    elif cam_id == 21:
+        exits = [
+            [(342, 435), (1787, 312)],  # middle exit
+        ]
+        
+    elif cam_id == 22:
+        exits = [
+            [(100, 900), (700, 900)],  # bottom exit
+            [(1000, 200), (1150, 200)],  # top exit
+        ]
+        
+    elif cam_id == 23:
+        exits = [
+            [(1280, 850), (1870, 1175)],  # middle exit
+        ]
+        
+    elif cam_id == 25:
+        exits = [
+            [(966, 1163), (1315, 929)],  # middle exit
+            [(2180, 1526), (1643, 1902)],  # bottom right exit
+        ]
+        
+    elif cam_id == 41:
         exits = [
             [(65, 220), (110, 316)], # bottom left exit
             [(950, 866), (1278, 575)], # bottom right exit
@@ -88,11 +136,92 @@ def get_lines(cam_id):
     """ Gives the vectors describing each possible movement through the intersection
         These values are hardcoded on a per interseciton basis """
     
-    print("using movements from cam: ", cam_id)
+    # print("using movements from cam: ", cam_id)
 
-    if cam_id == 41:
+    # mov_exits[i] = index of line in exits[] that movement[i] ends at
+    # This is really only important for intersections with many possible movements, to reduce candidates for matching movements
+    # If there aren't many intersections, it will be None, as it is not needed for matching movements
+    mov_exits = None
+    
+    if cam_id == 10:
         # Each movement described as [start_point, end_point]
         # where index i is movement i+1
+        movements = [
+            [(1100, 1080), (950, 200)],  # up
+            [(730, 130), (550, 900)],  # down
+        ]
+        # c10 to c16: 0
+        # c16 to c10: 1
+        
+        mov_exits = [0, 1]
+    
+    elif cam_id == 16:
+        movements = [
+            [(1111, 150), (800, 450)],  # down
+            [(1500, 1000), (1200, 450)],  # up
+        ]
+        # c16 to c17: 0
+        # c17 to c16: 1
+        
+    elif cam_id == 17:
+        movements = [
+            [(1100, 250), (800, 500)],  # down
+            [(1900, 770), (1250, 500)],  # up
+        ]
+        # c18 to c16: 0
+        # c16 to c18: 1
+        
+    elif cam_id == 18:
+        movements = [
+            [(100, 1700), (1800, 1400)],  # up
+            [(2150, 1350), (1380, 1240)],  # down
+        ]
+        # c17 to c20: 0
+        # c20 to c17: 1
+        
+    elif cam_id == 20:
+        movements = [
+            [(365, 769), (653, 956)],  # down
+            [(2526, 900), (1080, 850)],  # up
+        ]
+        # c18 to c21: 0
+        # c21 to c18: 1
+        
+    elif cam_id == 21:
+        movements = [
+            [(948, 127), (800, 400)],  # down
+            [(1872, 729), (1250, 400)],  # up
+        ]
+        # c20 to c22: 0
+        # c22 to c20: 1
+        
+    elif cam_id == 22:
+        movements = [
+            [(900, 200), (350, 900)],  # down
+            [(1000, 1000), (1050, 200)],  # up
+        ]
+        # c23 to c21: 0
+        # c21 to c23: 1
+
+        mov_exits = [0, 1]
+        
+    elif cam_id == 23:
+        movements = [
+            [(1900, 930), (1400, 970)],  # down
+            [(240, 1600), (1700, 1090)],  # up
+        ]
+        # c25 to c22: 0
+        # c22 to c25: 1
+        
+    elif cam_id == 25:
+        # c25 to c23: 0
+        # c23 to c25: 1
+        movements = [
+            [(2536, 1273), (1300, 1130)],  # left
+            [(500, 1150), (2245, 1749)],  # right
+        ]
+        
+    elif cam_id == 41:
         movements = [
             [(90, 476), (1000, 189)], # bl straight
             [(111, 408), (321, 126)], # bl left
@@ -115,7 +244,6 @@ def get_lines(cam_id):
             [(273, 144), (314, 126)], # tl u-turn
         ]   
 
-        # mov_exits[i] = index of line in exits[] that movement[i] ends at
         mov_exits = [2, 3, 1, 0, 3, 0, 2, 1, 0, 1, 3, 2, 1, 2, 0, 3]
 
 

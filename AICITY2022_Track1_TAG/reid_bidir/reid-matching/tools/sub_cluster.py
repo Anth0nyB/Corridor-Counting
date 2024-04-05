@@ -182,8 +182,8 @@ if __name__ == '__main__':
     new_clu = list()
     for cid_tid_list in clu:
         # if len(cid_tid_list) <= 1: continue
-        cam_list = [cid_tid[0] for cid_tid in cid_tid_list]
-        if len(cam_list)!=len(set(cam_list)): continue
+        cam_list = [cid_tid[0] for cid_tid in cid_tid_list] # Get camera id for each detection
+        if len(cam_list)!=len(set(cam_list)): continue  # If any repeat camera ids, remove from clu
         new_clu.append([cid_tid for cid_tid in cid_tid_list])
     print('new_clu: ', len(new_clu))
 

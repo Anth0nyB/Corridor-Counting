@@ -8,3 +8,4 @@
 */reid_bidir/reid-matching/tools/exp
 **/__pycache__
 */console.out
+**/*.pkl
