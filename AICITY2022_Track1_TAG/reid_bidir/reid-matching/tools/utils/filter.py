@@ -162,33 +162,18 @@ def st_filter(st_mask, cid_tids,cid_tid_dict):
     return st_mask
 
 def subcam_list(cid_tid_dict,cid_tids):
-    sub_3_4 = dict()
-    sub_4_3 = dict()
+    adjacent_cams = [(10, 16), (16, 17), (17, 18), (18, 20), (20, 21), (21, 22), (22, 23), (23, 25)]    # for us these are restricted to our specific corridors of interest
+    
+    groupings = {}
     for cid_tid in cid_tids:
-        cid,tid = cid_tid
-        tracklet = cid_tid_dict[cid_tid]
-        if 8 in tracklet['sub_zone_list'] and cid not in [46]:
-            if not cid+1 in sub_4_3:
-                sub_4_3[cid+1] = []
-            sub_4_3[cid + 1].append(cid_tid)
-        if 6 in tracklet['sub_zone_list'] and cid not in [41]:
-            if not cid in sub_4_3:
-                sub_4_3[cid] = []
-            sub_4_3[cid].append(cid_tid)
-        if 5 in tracklet['sub_zone_list'] and cid not in [41]:
-            if not cid-1 in sub_3_4:
-                sub_3_4[cid-1] = []
-            sub_3_4[cid - 1].append(cid_tid)
-        if 7 in tracklet['sub_zone_list'] and cid not in [46]:
-            if not cid in sub_3_4:
-                sub_3_4[cid] = []
-            sub_3_4[cid].append(cid_tid)
-    sub_cid_tids = dict()
-    for i in sub_3_4:
-        sub_cid_tids[(i,i+1)]=sub_3_4[i]
-    for i in sub_4_3:
-        sub_cid_tids[(i,i-1)]=sub_4_3[i]
-    return sub_cid_tids
+        if cid_tid_dict[cid_tid]['movement_info']['mov_id'] == -1:
+            continue
+        cid, tid = cid_tid
+        for cam_pair in adjacent_cams:
+            if cid in cam_pair:
+                groupings.setdefault(cam_pair, []).append(cid_tid)
+            
+    return groupings
 
 def subcam_list2(cid_tid_dict,cid_tids):
     sub_dict = dict()

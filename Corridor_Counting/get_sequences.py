@@ -27,7 +27,7 @@ if __name__ == '__main__':
                 continue
             
             u_id = local_to_universal_id_map[(video_id, local_id)]
-            all_detections.setdefault(u_id, []).append((video_id, data['movement'][1], data['movement'][0]))
+            all_detections.setdefault(u_id, []).append((video_id, data['movement_info']['frame'], data['movement_info']['mov_id']))
             
     for u_id, sequence in all_detections.items():
         if len(sequence) == 1 and sequence[0][1] == -1:

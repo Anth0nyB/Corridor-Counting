@@ -16,8 +16,8 @@ def get_sim_matrix(_cfg,cid_tid_dict,cid_tids):
     # sim_matrix = np.matmul(q_arr, g_arr.T)
 
     # st mask
-    # st_mask = np.ones((count, count), dtype=np.float32)
-    # st_mask = intracam_ignore(st_mask, cid_tids)
+    st_mask = np.ones((count, count), dtype=np.float32)
+    st_mask = intracam_ignore(st_mask, cid_tids)
     # st_mask = st_filter(st_mask, cid_tids, cid_tid_dict)
 
     # visual rerank
@@ -26,7 +26,7 @@ def get_sim_matrix(_cfg,cid_tid_dict,cid_tids):
     print(visual_sim_matrix)
     # merge result
     np.set_printoptions(precision=3)
-    sim_matrix = visual_sim_matrix #* st_mask
+    sim_matrix = visual_sim_matrix * st_mask
 
     # sim_matrix[sim_matrix < 0] = 0
     np.fill_diagonal(sim_matrix, 0)
@@ -57,14 +57,14 @@ def get_cid_tid(cluster_labels,cid_tids):
         cluster.append(cid_tid_list)
     return cluster
 
-def combin_cluster(sub_labels,cid_tids):
+def combin_cluster(grouped_labels,cid_tids):
     cluster = list()
-    for sub_c_to_c in sub_labels:
+    for group in grouped_labels:
         if len(cluster)<1:
-            cluster = sub_labels[sub_c_to_c]
+            cluster = grouped_labels[group]
             continue
 
-        for c_ts in sub_labels[sub_c_to_c]:
+        for c_ts in grouped_labels[group]:
             is_add = False
             for i_c, c_set in enumerate(cluster):
                 if len(set(c_ts) & set(c_set))>0:
@@ -95,62 +95,23 @@ def combin_feature(cid_tid_dict,sub_cluster):
     return cid_tid_dict
 
 def get_labels(_cfg, cid_tid_dict, cid_tids, score_thr):
-    # 1st cluster
-    # sub_cid_tids = subcam_list(cid_tid_dict,cid_tids)
-    # sub_labels = dict()
     dis_thrs = [0.7,0.5,0.5,0.5,0.5,
                 0.7,0.5,0.5,0.5,0.5]
-    # for i,sub_c_to_c in enumerate(sub_cid_tids):
-    # for i,cid_tid in enumerate(cid_tids):
-        # sim_matrix = get_sim_matrix(_cfg,cid_tid_dict,sub_cid_tids[sub_c_to_c])
-    cams_list = sorted(set([cid_tid[0] for cid_tid in cid_tids]))
-    sim_matrix = get_sim_matrix(_cfg,cid_tid_dict, list(cid_tid_dict.keys()))
-    cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs[1], metric='precomputed',
-                            linkage='complete').fit_predict(1 - sim_matrix)
-    labels = get_match(cluster_labels)
-    print(type(labels))
-    # cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
-    cluster_cid_tids = get_cid_tid(labels,list(cid_tid_dict.keys()))
-    # sub_labels[sub_c_to_c] = cluster_cid_tids
     
-    # sub_labels[cid_tid] = cluster_cid_tids
-    # print("old tricklets:{}".format(len(cid_tids)))
-    # labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
-
-    # 2ed cluster
-    # cid_tid_dict_new = combin_feature(cid_tid_dict, sub_cluster)
-    # sub_cid_tids = subcam_list2(cid_tid_dict_new,cid_tids)
-    # sub_labels = dict()
-    # for i,sub_c_to_c in enumerate(sub_cid_tids):
-    #     sim_matrix = get_sim_matrix(_cfg,cid_tid_dict_new,sub_cid_tids[sub_c_to_c])
-    #     cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs[i], metric='precomputed',
-    #                             linkage='complete').fit_predict(1 - sim_matrix)
-    #     labels = get_match(cluster_labels)
-    #     cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
-    #     sub_labels[sub_c_to_c] = cluster_cid_tids
-    # print("old tricklets:{}".format(len(cid_tids)))
-    # labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
-
-    # cid_tid_dict_new = combin_feature(cid_tid_dict, sub_cluster)
-    # sub_cid_tids = subcam_list2(cid_tid_dict_new,cid_tids)
-    # sub_labels = dict()
-    # for i,sub_c_to_c in enumerate(sub_cid_tids):
-    #     sim_matrix = get_sim_matrix(_cfg,cid_tid_dict_new,sub_cid_tids[sub_c_to_c])
-    #     cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-0.1, metric='precomputed',
-    #                             linkage='complete').fit_predict(1 - sim_matrix)
-    #     labels = get_match(cluster_labels)
-    #     cluster_cid_tids = get_cid_tid(labels,sub_cid_tids[sub_c_to_c])
-    #     sub_labels[sub_c_to_c] = cluster_cid_tids
-    # print("old tricklets:{}".format(len(cid_tids)))
-    # labels,sub_cluster = combin_cluster(sub_labels,cid_tids)
-
-    # # 3rd cluster
-    # cid_tid_dict_new = combin_feature(cid_tid_dict,sub_cluster)
-    # sim_matrix = get_sim_matrix(_cfg,cid_tid_dict_new, cid_tids)
-    # cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1, affinity='precomputed',
-    #                                          linkage='complete').fit_predict(1 - sim_matrix)
-    # labels = get_match(cluster_labels)
-    return cluster_cid_tids
+    # Divide up the vehicles based on adjacent cameras to perform reid
+    # This reduces the size of the clustering problem and increases accuracy
+    grouped_cid_tids = subcam_list(cid_tid_dict,cid_tids)
+    grouped_labels = dict()
+    for i,group in enumerate(grouped_cid_tids):
+        sim_matrix = get_sim_matrix(_cfg,cid_tid_dict,grouped_cid_tids[group])
+        cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs[1], metric='precomputed', linkage='complete').fit_predict(1 - sim_matrix)
+        labels = get_match(cluster_labels)
+        cluster_cid_tids = get_cid_tid(labels,grouped_cid_tids[group])
+        grouped_labels[group] = cluster_cid_tids
+    labels,sub_cluster = combin_cluster(grouped_labels,cid_tids)
+    clustered_cid_tids = get_cid_tid(labels, cid_tids)
+    
+    return clustered_cid_tids
 
 if __name__ == '__main__':
     cfg.merge_from_file(f'../../../config/{sys.argv[1]}')
@@ -159,7 +120,7 @@ if __name__ == '__main__':
     cams = os.listdir(opj("../../..", cfg.DATA_DIR))
     cams = list(filter(lambda x: 'c' in x, cams))
     scene_cluster = [[int(x[1:]) for x in cams]]
-    fea_dir = './exp/viz/validation/S05/trajectory/'
+    fea_dir = './exp/viz/validation/S05/movement/'
     cid_tid_dict = dict()
 
     for pkl_path in os.listdir(fea_dir):
@@ -181,7 +142,7 @@ if __name__ == '__main__':
     # Remove any vehicles with too many or too few cameras appeared on
     new_clu = list()
     for cid_tid_list in clu:
-        # if len(cid_tid_list) <= 1: continue
+        if len(cid_tid_list) <= 1: continue
         cam_list = [cid_tid[0] for cid_tid in cid_tid_list] # Get camera id for each detection
         if len(cam_list)!=len(set(cam_list)): continue  # If any repeat camera ids, remove from clu
         new_clu.append([cid_tid for cid_tid in cid_tid_list])

@@ -96,7 +96,7 @@ if __name__ == '__main__':
                                         closest_mov = mov_num
 
                             # Record the matched movement
-                            cam_detections[local_id]["movement"] = (closest_mov, frame_num)
+                            cam_detections[local_id]["movement_info"] = {'mov_id': closest_mov, 'frame': frame_num}
                             matched = True
                             break
                     # Jump out to the next tracklet
@@ -108,10 +108,10 @@ if __name__ == '__main__':
                 # Reached end of tracklet and it never crossed an exit line (ie parked cars)
                 if not matched:
                     # print("[",tracklet[0][1]['bbox'],",", tracklet[-1][1]['bbox'], "],")
-                    cam_detections[local_id]["movement"] = (-1, -1)
+                    cam_detections[local_id]["movement_info"] = {'mov_id': -1, 'frame': -1}
 
             else:
-                cam_detections[local_id]["movement"] = (-1, -1)
+                cam_detections[local_id]["movement_info"] = {'mov_id': -1, 'frame': -1}
                 pass
         
         out_path = os.path.join(movements_root, pkl_file)
