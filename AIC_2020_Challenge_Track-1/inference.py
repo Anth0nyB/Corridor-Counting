@@ -6,7 +6,6 @@ import os
 import torch
 import numpy as np
 import cv2
-from glob import glob
 from get_lines import *
 from sort import *
 from models import *  
@@ -14,13 +13,12 @@ from utils.datasets import *
 from utils.utils import *
 
 # input: start_video_id end_video_id 
-start_video = sys.argv[1]
-end_video = sys.argv[2]
+# start_video = sys.argv[1]
+# end_video = sys.argv[2]
 
-data_path = 'data'
-frames_path = "../AICITY2022_Track1_TAG/datasets/detection/images/test/S06"
-datasetA_path = os.path.join(data_path, 'Dataset_A')
-video_id_dict = get_video_id(datasetA_path)
+data_path = '../AICITY2022_Track1_TAG/datasets/Dataset_A/validation/S05'
+# datasetA_path = os.path.join(data_path, 'Dataset_A')
+# video_id_dict = get_video_id(datasetA_path)
 classes = {0:'car', 1:'truck'}
 agnostic_nms = False
 augment = False
@@ -92,21 +90,23 @@ def get_boxes(frame):
 
 
 if __name__=='__main__':
-    for video_id in range(int(start_video), int(end_video)+1):
+    
+    # for video_id in range(int(start_video), int(end_video)+1):
+    for cam in os.listdir(data_path):
+        video_id = int(cam[-3:])
         print('video_id:%s' % str(video_id))
 
         # Might have to change value and rename to intersection id
-        num_movs, mov_vectors, mov_exit = get_lines(video_id + 40)
-        num_exits, exits = get_exits(video_id + 40)
-        roi_nums, rois = get_rois(video_id, data_path)
+        num_movs, mov_vectors, mov_exit = get_lines(video_id)
+        num_exits, exits = get_exits(video_id)
+        # roi_nums, rois = get_rois(video_id, data_path)
         counts = [0] * num_movs
-        counts_roi = [0] * roi_nums
-        # vs = cv2.VideoCapture(os.path.join(datasetA_path, video_name))
+        # counts_roi = [0] * roi_nums
+        vs = cv2.VideoCapture(os.path.join(data_path, cam, "vdo.avi"))
 
-        cam = "c%.3d" % (video_id + 40)
-        image_dir = os.path.join(frames_path, cam, "img1")
-        cam_image_list = glob.glob(image_dir+'/*.jpg')
-        image_list = sorted(cam_image_list)
+        # image_dir = os.path.join(frames_path, cam)
+        # cam_image_list = glob.glob(image_dir+'/*.jpg')
+        # image_list = sorted(cam_image_list)
 
         (W, H) = (None, None)
         writer = None
@@ -121,13 +121,14 @@ if __name__=='__main__':
         for i in range(num_movs):
             delays.append([])
         # save output result of every video
-        csv_file_processed = open(os.path.join('.', output_path, '{}.csv'.format(video_id + 40)), 'w')
+        csv_file_processed = open(os.path.join('.', output_path, '{}.csv'.format(video_id)), 'w')
         csv_writer_processed = csv.writer(csv_file_processed)
         csv_writer_processed.writerow(['video_id', 'frame_id', 'movement_id', 'vehicle_class_id','xmin', 'ymin', 'width', 'height', 's_xmin', 's_ymin', 's_width', 's_height'])
         data = {}
         frame_count = 0
         while True:
-            if not image_list:
+            ret, frame = vs.read()
+            if not ret:
                 result = []
                 result_ori = []
                 for key in data:
@@ -145,7 +146,6 @@ if __name__=='__main__':
                 csv_file_processed.close()
                 break
 
-            frame = cv2.imread(image_list.pop(0))
             frame_count += 1
             print(frame_count)
             with torch.no_grad():
@@ -220,7 +220,7 @@ if __name__=='__main__':
 
                                 best_sim = 0
                                 for mov_num in range(num_movs):
-                                    if mov_exit[mov_num] == exit_num:
+                                    if mov_exit is None or mov_exit[mov_num] == exit_num:
                                         mag_mov = np.linalg.norm(mov_vectors[mov_num])
                                         curr_sim = np.dot(vector, mov_vectors[mov_num]) / (mag_vector * mag_mov)
 
