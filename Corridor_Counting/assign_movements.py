@@ -8,7 +8,6 @@ from get_lines import *
 CAMS_OF_INTEREST = [10, 16, 17, 18, 20, 21, 22, 23, 25]
 
 
-
 """ Used to determine if two lines intersect """
 def ccw(A, B, C):
     return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
@@ -29,17 +28,15 @@ def rect_intersect(bbox, exit_line):
     return left or right or top or bottom
     
 
-#   reid_bidir/reid-matching/tools/exp/viz/test/S06/trajectory/
+#   reid_bidir/reid-matching/tools/exp/viz/validation/S05/trajectory/
 #   has dictionaries {local_ids: (all needed info)}
 #   so for each local_id, perform tracking based on bbox to match movement
-#
-#   reid_bidir/reid-matching/tools/test_cluster.pkl maps (cam, local_id) pairs to u_id
-
-if __name__ == '__main__':
+if __name__ == '__main__':    
     detects_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/trajectory/'
-    local_to_universal_map = pickle.load(open('../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl', 'rb'))['cluster']
+    
+    movements_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
+    # local_to_universal_map = pickle.load(open('../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl', 'rb'))['cluster']
 
-    results = {}
     for pkl_file in os.listdir(detects_root):
         # For cams whose lines are not implemented
         video_id = int(pkl_file.split('.')[0][1:])
@@ -47,7 +44,6 @@ if __name__ == '__main__':
             continue
         
         print("matching movements for cam", video_id)
-        
         
         det_path = os.path.join(detects_root, pkl_file)
         cam_detections = pickle.load(open(det_path, 'rb'))
@@ -58,11 +54,6 @@ if __name__ == '__main__':
 
         # Iterate through each tracklet in the detections
         for local_id in cam_detections.keys():
-            if (video_id, local_id) not in local_to_universal_map:
-                continue
-            
-            u_id = local_to_universal_map[(video_id, local_id)]
-
             # Iterate through each frame of a tracklet to see if/when it crosses an exit line
             matched = False
             tracklet = [x for x in cam_detections[local_id]['tracklet'].items()]
@@ -89,8 +80,11 @@ if __name__ == '__main__':
                             # Find most similar movement vector
                             vector = np.array([end_point[0] - start_point[0], end_point[1] - start_point[1]])
                             mag_vector = np.linalg.norm(vector)
+                            if mag_vector == 0:
+                                continue
 
-                            best_sim = 0
+                            best_sim = -1
+                            closest_mov = -1
                             for mov_num in range(num_movs):
                                 # Reduce candidates to only movement lines associated with the exit the vehicle crossed
                                 if mov_exit is None or mov_exit[mov_num] == exit_num:
@@ -101,11 +95,8 @@ if __name__ == '__main__':
                                         best_sim = curr_sim
                                         closest_mov = mov_num
 
-                            # if best_sim == 0:
-                            #     closest_mov = -1
-
                             # Record the matched movement
-                            results.setdefault(u_id, []).append((video_id, frame_num, closest_mov + 1))
+                            cam_detections[local_id]["movement"] = (closest_mov, frame_num)
                             matched = True
                             break
                     # Jump out to the next tracklet
@@ -114,21 +105,16 @@ if __name__ == '__main__':
                     
                     p0 = p1
                     
-                # Reached end of tracklet and it never crossed an exit line
+                # Reached end of tracklet and it never crossed an exit line (ie parked cars)
                 if not matched:
-                    # print("not given mov_id: ", u_id, video_id, tracklet[0][1]['bbox'], tracklet[-1][1]['bbox'])
                     # print("[",tracklet[0][1]['bbox'],",", tracklet[-1][1]['bbox'], "],")
-                    # results.setdefault(u_id, []).append((video_id, tracklet[-1][0], -1))
-                    pass
+                    cam_detections[local_id]["movement"] = (-1, -1)
 
             else:
-                # print("[",tracklet[0][1]['bbox'],",", tracklet[-1][1]['bbox'], "],")
-                # print(local_id, tracklet[0][0], tracklet[-1][0], -3)
+                cam_detections[local_id]["movement"] = (-1, -1)
                 pass
-
-
-    for u_id, data in results.items():
-        # Sort output by frame
-        data = sorted(data, key=lambda x: x[1])
-        print(u_id, data) 
+        
+        out_path = os.path.join(movements_root, pkl_file)
+        print(f"saving movements in {out_path}")
+        pickle.dump(cam_detections, open(out_path, 'wb'))
 
