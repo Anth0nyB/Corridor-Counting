@@ -15,5 +15,5 @@
 #SBATCH --mail-type=END
 
 source venv/bin/activate
-python inference.py 1 31
+python inference.py
 deactivate
