@@ -27,7 +27,8 @@ def dti(txt_path, save_path, cam_path, n_min=25, n_dti=20):
     cam_nums = [int(cam[-3:]) for cam in cam_nums]
     for ind in cam_nums:
         index = (seq_info[:, 0] == ind)
-        camera_pools[ind] = seq_info[index]
+        if np.any(index):
+            camera_pools[ind] = seq_info[index]
     
     seq_results = np.empty((0, 9), dtype=np.float64)
     for cid, seq_data in tqdm(camera_pools.items()):
