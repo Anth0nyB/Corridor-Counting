@@ -10,36 +10,15 @@ from PIL import Image, ImageDraw
 
 colors = ['blue', 'green', 'purple', 'yellow']
 
+# c0xx
 exits = [
-    [(), ()],  # bottom right exit
-    [(), ()],  # top right exit
-    [(), ()],  # top exit
-    [(), ()],  # left exit
+    [(), ()],  # middle exit
 ]
 
 movements = [
-    [(), ()],  # bl straight
-    [(), ()],  # bl left
-    [(), ()],  # bl right
-    [(), ()],  # bl u-turn
-
-    [(), ()],  # r straight
-    [(), ()],  # r left
-    [(), ()],  # r right
-    [(), ()],  # r u-turn
-
-    [(), ()],  # tr straight
-    [(), ()],  # tr left
-    [(), ()],  # tr right
-    [(), ()],  # tr u-turn
-
-    [(), ()],  # tl straight
-    [(), ()],  # tl left
-    [(), ()],  # tl right
-    [(), ()],  # tl u-turn
+    [(), ()],  # down
+    [(), ()],  # up
 ]
-
-
 # ---
 
 
@@ -56,6 +35,14 @@ def main(file_path: str):
         draw.line(mov, width=4, fill=colors[int(i/4)])
         draw.ellipse([(mov[1][0] - 10, mov[1][1] - 10), (mov[1][0] + 10, mov[1][1] + 10)], width=1, fill=colors[int(i/4)])
 
+    # for pair in boxes:
+    #     start = pair[0]
+    #     p0 = (((start[0] + start[2])/2), ((start[1] + start[3])/2))
+    #     end = pair[1]
+    #     p1 = (((end[0] + end[2])/2), ((end[1] + end[3])/2))
+    #     draw.rectangle(start, width=4, outline="green")
+    #     draw.rectangle(end, width=4, outline="teal")
+    #     draw.line([p0, p1], width=4, fill="orange")
     image.show()
 
 
