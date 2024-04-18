@@ -27,11 +27,12 @@ if __name__ == '__main__':
                 continue
             
             u_id = local_to_universal_id_map[(video_id, local_id)]
-            all_detections.setdefault(u_id, []).append((video_id, data['movement_info']['frame'], data['movement_info']['mov_id']))
+            all_detections.setdefault(u_id, []).append((video_id, data['tid'], data['movement_info']['frame'], data['movement_info']['mov_id']))
+           
+    with open('predicted_sequences.txt', 'w') as f:
+        for u_id, sequence in all_detections.items():
+            if len(sequence) == 1 and sequence[0][1] == -1:
+                continue
             
-    for u_id, sequence in all_detections.items():
-        if len(sequence) == 1 and sequence[0][1] == -1:
-            continue
-        
-        all_detections[u_id] = sorted(sequence, key=lambda x: x[1])
-        print(u_id, all_detections[u_id])
+            all_detections[u_id] = sorted(sequence, key=lambda x: x[2])
+            f.write(f"{u_id} {all_detections[u_id]}\n")
