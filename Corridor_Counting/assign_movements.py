@@ -5,7 +5,8 @@ import numpy as np
 sys.path.append('../AIC_2020_Challenge_Track-1/')
 from get_lines import *
 
-CAMS_OF_INTEREST = [10, 16, 17, 18, 20, 21, 22, 23, 25]
+CAMS_OF_INTEREST = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 29, 33, 34]
+# CAMS_OF_INTEREST = [19, 27, 29, 33, 34]
 
 
 """ Used to determine if two lines intersect """
@@ -75,6 +76,7 @@ if __name__ == '__main__':
                     # Check if vehicle crossed exit line
                     for exit_num in range(num_exits):
                         if rect_intersect(box, (exits[exit_num][0], exits[exit_num][1])) or line_intersect(p0, p1, exits[exit_num][0], exits[exit_num][1]):
+                        # if line_intersect(p0, p1, exits[exit_num][0], exits[exit_num][1]):
                             end_point = p1
 
                             # Find most similar movement vector
@@ -83,7 +85,7 @@ if __name__ == '__main__':
                             if mag_vector == 0:
                                 continue
 
-                            best_sim = -1
+                            best_sim = 0
                             closest_mov = -1
                             for mov_num in range(num_movs):
                                 # Reduce candidates to only movement lines associated with the exit the vehicle crossed
@@ -95,10 +97,11 @@ if __name__ == '__main__':
                                         best_sim = curr_sim
                                         closest_mov = mov_num
 
-                            # Record the matched movement
-                            cam_detections[local_id]["movement_info"] = {'mov_id': closest_mov, 'frame': frame_num}
-                            matched = True
-                            break
+                            if closest_mov != -1:
+                                # Record the matched movement
+                                cam_detections[local_id]["movement_info"] = {'mov_id': closest_mov, 'frame': frame_num}
+                                matched = True
+                                break
                     # Jump out to the next tracklet
                     if matched:
                         break
