@@ -58,7 +58,7 @@ def get_exits(cam_id):
     elif cam_id == 19:
         exits = [
             [(1250, 450), (1535, 450)],  # top exit
-            [(615, 900), (615, 1420)],  # left exit
+            [(715, 900), (715, 1420)],  # left exit
             [(2250, 1530), (2250, 1920)],  # right exit
         ]
         
@@ -91,7 +91,7 @@ def get_exits(cam_id):
     elif cam_id == 25:
         exits = [
             [(966, 1163), (1315, 929)],  # middle exit
-            [(2100, 1575), (1643, 1902)],  # bottom right exit
+            [(2000, 1525), (1550, 1850)],  # bottom right exit
         ]
 
     elif cam_id == 27:
@@ -103,7 +103,7 @@ def get_exits(cam_id):
     elif cam_id == 29:
         exits = [
             [(1250, 290), (1400, 290)],  # top
-            [(360, 645), (990, 635)],  # bottom
+            [(260, 545), (990, 635)],  # bottom
         ]
 
     elif cam_id == 33:
@@ -199,6 +199,8 @@ def get_lines(cam_id):
         # c16 to c17: 0
         # c17 to c16: 1
         
+        mov_exits = [0, 0]
+        
     elif cam_id == 17:
         movements = [
             [(1100, 250), (800, 500)],  # down
@@ -207,6 +209,8 @@ def get_lines(cam_id):
         # c18 to c16: 0
         # c16 to c18: 1
         
+        mov_exits = [0, 0]
+        
     elif cam_id == 18:
         movements = [
             [(100, 1700), (1800, 1400)],  # up
@@ -214,6 +218,8 @@ def get_lines(cam_id):
         ]
         # c17 to c20: 0
         # c20 to c17: 1
+        
+        mov_exits = [0, 0]
 
     elif cam_id == 19:
         movements = [
@@ -228,6 +234,7 @@ def get_lines(cam_id):
         # c24 to c19: 2
         # c19 to c24: 3
         # c19 to c24: 4
+        mov_exits = [1, 0, 1, 0, 2]
         
     elif cam_id == 20:
         movements = [
@@ -237,6 +244,8 @@ def get_lines(cam_id):
         # c18 to c21: 0
         # c21 to c18: 1
         
+        mov_exits = [0, 0]
+        
     elif cam_id == 21:
         movements = [
             [(948, 127), (800, 400)],  # down
@@ -244,6 +253,8 @@ def get_lines(cam_id):
         ]
         # c20 to c22: 0
         # c22 to c20: 1
+        
+        mov_exits = [0, 0]
         
     elif cam_id == 22:
         movements = [
@@ -262,6 +273,8 @@ def get_lines(cam_id):
         ]
         # c25 to c22: 0
         # c22 to c25: 1
+        
+        mov_exits = [0, 0]
 
     elif cam_id == 24:
         movements = [
@@ -274,6 +287,8 @@ def get_lines(cam_id):
         # c19 to c27: 2
         # ??? to c27: similar to 2, example at 3:36
         
+        mov_exits = [0, 0, 0]
+        
     elif cam_id == 25:
         # c25 to c23: 0
         # c23 to c25: 1
@@ -281,6 +296,8 @@ def get_lines(cam_id):
             [(2536, 1273), (1300, 1130)],  # left
             [(500, 1150), (2245, 1749)],  # right
         ]
+        
+        mov_exits = [0, 1]
 
     elif cam_id == 27:
         movements = [
@@ -294,6 +311,8 @@ def get_lines(cam_id):
         # ??? to c27: 2
         # ??? to c27: 3
         # ??? to c24: similar to 0
+        
+        mov_exits = [0, 1, 1, 1]
 
     elif cam_id == 29:
         movements = [
@@ -302,6 +321,8 @@ def get_lines(cam_id):
         ]
         # c33 to c29: 0
         # c29 to c33: 1
+        
+        mov_exits = [1, 0]
 
     elif cam_id == 33:
         movements = [
@@ -310,6 +331,8 @@ def get_lines(cam_id):
         ]
         # c34 to c29: 0
         # c29 to c34: 1
+        
+        mov_exits = [0, 1]
 
     elif cam_id == 34:
         movements = [
@@ -318,6 +341,8 @@ def get_lines(cam_id):
         ]
         # c33 to c34: 0
         # c34 to c33: 1
+        
+        mov_exits = [0, 1]
 
     elif cam_id == 41:
         movements = [
