@@ -5,7 +5,7 @@ import pickle
 
 if __name__ == '__main__':
     try:
-        f = open("predicted_sequences.txt", "r")
+        f = open("../predicted_sequences.txt", "r")
     except:
         print("Prediction file not found. Have you run 'get_sequences.py'?")
         
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         print("Input must be int")
         
         
-    all_detections_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
+    all_detections_root = '../../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
     for sequence in f:
         u_id, sequence = sequence.split("[")
         if int(u_id) != target_uid:
@@ -40,10 +40,12 @@ if __name__ == '__main__':
             frames.sort()
             first_frame = frames[0]
             
+            mov = cam_data[local_id]["movement_info"]["mov_id"]
+            
             boxes = []
             for frame in cam_data[local_id]["tracklet"].values():
                 boxes.append(frame['bbox'])
 
-            result["data"][f"c0{cam}"] = {"start_frame": first_frame, "bounding_boxes": boxes}
+            result["data"][f"c0{cam}"] = {"start_frame": first_frame, "movement": mov,  "bounding_boxes": boxes}
         
         json.dump(result, outfile)
