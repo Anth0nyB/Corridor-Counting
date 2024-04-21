@@ -93,6 +93,11 @@ def get_exits(cam_id):
             [(966, 1163), (1315, 929)],  # middle exit
             [(2000, 1525), (1550, 1850)],  # bottom right exit
         ]
+    
+    elif cam_id == 26:
+        exits = [
+            [(1355, 580), (819, 584)],  # middle exit
+        ]
 
     elif cam_id == 27:
         exits = [
@@ -298,6 +303,14 @@ def get_lines(cam_id):
         ]
         
         mov_exits = [0, 1]
+    
+    elif cam_id == 26:
+        movements = [
+            [(1106, 156), (895, 632)],  #down
+            [(1176, 1031), (1216, 538)],  #up
+        ]
+
+        mov_exits = [0, 0]
 
     elif cam_id == 27:
         movements = [
