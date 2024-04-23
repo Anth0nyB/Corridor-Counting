@@ -41,11 +41,14 @@ if __name__ == '__main__':
             first_frame = frames[0]
             
             mov = cam_data[local_id]["movement_info"]["mov_id"]
+            mov_frame = cam_data[local_id]["movement_info"]["frame"]
             
+            # frames may need to be sorted 
+            # One instance had the last few bboxes at front of values() causing all drawn boxes to be out of sync
             boxes = []
             for frame in cam_data[local_id]["tracklet"].values():
                 boxes.append(frame['bbox'])
 
-            result["data"][f"c0{cam}"] = {"start_frame": first_frame, "movement": mov,  "bounding_boxes": boxes}
+            result["data"][f"c0{cam}"] = {"start_frame": first_frame, "movement": mov,  "frame_assigned": mov_frame, "bounding_boxes": boxes}
         
         json.dump(result, outfile)

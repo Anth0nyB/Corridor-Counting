@@ -19,7 +19,4 @@ if __name__ == '__main__':
                 
             assignment_info[video_id][data["movement_info"]["mov_id"]].append([tracklet[0][1]['bbox'], tracklet[-1][1]['bbox']])
     
-    # with open("assignment_info.pkl", 'w') as out_file:
-    #     out_file.dump(assignment_info)
-    
     pickle.dump(assignment_info, open("assignment_info.pkl", "wb"))
