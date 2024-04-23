@@ -57,9 +57,9 @@ def get_exits(cam_id):
 
     elif cam_id == 19:
         exits = [
-            [(1250, 450), (1535, 450)],  # top exit
-            [(715, 900), (715, 1420)],  # left exit
-            [(2250, 1530), (2250, 1920)],  # right exit
+            # [(1250, 450), (1535, 450)],  # top exit
+            [(715, 900), (715, 1620)],  # middle exit
+            # [(2250, 1530), (2250, 1920)],  # right exit
         ]
         
     elif cam_id == 20:
@@ -228,18 +228,16 @@ def get_lines(cam_id):
 
     elif cam_id == 19:
         movements = [
-            [(1400, 450), (320, 1130)],  # t right
-            [(2450, 1250), (1450, 475)],  # r right
             [(2450, 1250), (260, 1110)],  # r straight
-            [(320, 1630), (1370, 420)],  # l left (illegal!)
             [(320, 1630), (2330, 1730)],  # l straight
+            # [(2450, 1250), (1450, 475)],  # r right
+            # [(1400, 450), (320, 1130)],  # t right
+            # [(320, 1630), (1370, 420)],  # l left (illegal!)
         ]
         # c24 to c19: 0
-        # ??? example at 5:51
-        # c24 to c19: 2
-        # c19 to c24: 3
-        # c19 to c24: 4
-        mov_exits = [1, 0, 1, 0, 2]
+        # c19 to c24: 1
+
+        mov_exits = [0, 0]
         
     elif cam_id == 20:
         movements = [
@@ -283,14 +281,13 @@ def get_lines(cam_id):
 
     elif cam_id == 24:
         movements = [
-            [(530, 580), (1820, 1720)],  # tl left
-            [(2200, 1085), (400, 1130)],  # r straight or left
+            # [(530, 580), (1820, 1720)],  # tl left
             [(420, 1780), (2265, 1700)],  # l straight
+            [(2200, 1085), (400, 1130)],  # r straight or left
         ]
         # c19 to c27: 0
         # c27 to c19: 1
-        # c19 to c27: 2
-        # ??? to c27: similar to 2, example at 3:36
+
         
         mov_exits = [0, 0, 0]
         
@@ -316,14 +313,11 @@ def get_lines(cam_id):
         movements = [
             [(575, 235), (1710, 850)],  # down
             [(1550, 410), (430, 95)],  # up (long)
-            [(1390, 165), (430, 95)],  # up (from parking lot)
-            [(595, 180), (430, 95)],  # up (short)
+            # [(1390, 165), (430, 95)],  # up (from parking lot)
+            # [(595, 180), (430, 95)],  # up (short)
         ]
         # c27 to c24: 0
         # c24 to c27: 1
-        # ??? to c27: 2
-        # ??? to c27: 3
-        # ??? to c24: similar to 0
         
         mov_exits = [0, 1, 1, 1]
 

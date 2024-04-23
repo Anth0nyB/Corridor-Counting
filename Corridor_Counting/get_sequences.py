@@ -4,7 +4,7 @@ import sys
 sys.path.append('../AIC_2020_Challenge_Track-1/')
 from get_lines import *
 
-CAMS_OF_INTEREST = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 29, 33, 34]
+CAMS_OF_INTEREST = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 33, 34]
 
 
 if __name__ == '__main__':
