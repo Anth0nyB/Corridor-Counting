@@ -12,8 +12,15 @@ if __name__ == '__main__':
     data = pd.read_csv('ccd.csv')
     data['camera_id'] = data['camera_id'].apply(lambda x: int(x[-3:]))
     
+    temp = data.loc[data['camera_id'] == 24]
+    temp = temp[['from_camera', 'to_camera']].replace("c026", "c027")
+    data.loc[data['camera_id'] == 24, ['from_camera', 'to_camera']] = temp
+    
     vehicles = {}
     for index, row in data.iterrows():
+        corridor = row['corridor_id']
+        vehicles.setdefault(corridor, {})
+        
         cam = row['camera_id']
         if cam not in annotations:
             continue
@@ -24,17 +31,24 @@ if __name__ == '__main__':
             if row['from_camera'] == f'c0{candidate[0]}' and row['to_camera'] == f'c0{candidate[1]}':
                 movement = mov_id
 
-        vehicles.setdefault(row['vehicle_id'], []).append((cam, row['to_frame'], movement))
+        vehicles[corridor].setdefault(row['vehicle_id'], []).append((cam, row['to_frame'], movement))
     
     
     with open("gt_sequences.txt", "w") as f:
-        for u_id, sequence in vehicles.items():
-            if len(sequence) == 1:
-                continue
-            
-            for detection in sequence:
-                if detection[2] == -1:
-                    break
-            else:
-                vehicles[u_id] = sorted(sequence, key=lambda x: x[1])
-                f.write(f"{u_id} {vehicles[u_id]}\n")
+        u_id = 0
+        
+        # for x in vehicles.values():
+        #     print(x[11])
+        for corridor, vehic in vehicles.items():
+            # print(vehic[1][0])
+            for i, sequence in vehic.items():
+                if len(sequence) == 1:
+                    continue
+                
+                for detection in sequence:
+                    if detection[2] == -1:
+                        break
+                else:
+                    vehicles[corridor][i] = sorted(sequence, key=lambda x: x[1])
+                    f.write(f"{u_id} {vehicles[corridor][i]}\n")
+                    u_id += 1
