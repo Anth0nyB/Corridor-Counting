@@ -6,18 +6,20 @@ python extract_image_feat.py "aic_reid2.yml"
 python extract_image_feat.py "aic_reid3.yml"
 python merge_reid_feat.py ${MCMT_CONFIG_FILE}
 
-#### MOT ####
+# #### MOT ####
 cd ../tracker/MOTBaseline
 sh run_aic.sh ${MCMT_CONFIG_FILE}
 
-#### MCMVT ####
+# #### MCMVT ####
 cd ../../reid_bidir/reid-matching/tools
 python trajectory_fusion.py ${MCMT_CONFIG_FILE}
 
 ### MOVEMENT MATCHING ###
-python ../../../../Corridor_Counting/assign_movements.py
+cd ../../../../Corridor_Counting
+python assign_movements.py
 
 ### MCMVT ###
+cd ../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools
 python sub_cluster.py ${MCMT_CONFIG_FILE}
 python gen_res.py ${MCMT_CONFIG_FILE}
 python interpolation.py ${MCMT_CONFIG_FILE}
