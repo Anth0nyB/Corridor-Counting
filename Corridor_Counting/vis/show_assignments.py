@@ -1,6 +1,9 @@
 import os
 import pickle
 
+
+""" For debugging annotations. Generates lines representing each vehicle's final trajectory 
+    and groups them based on which movement they were assigned to. """
 if __name__ == '__main__':        
     movements_root = '../../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
     

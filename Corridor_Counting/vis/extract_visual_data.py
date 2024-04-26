@@ -3,6 +3,8 @@ import json
 import pickle
 
 
+""" TO BE REMOVED 
+    has been integrated into demo.py to simplify process """
 if __name__ == '__main__':
     try:
         f = open("../predicted_sequences.txt", "r")

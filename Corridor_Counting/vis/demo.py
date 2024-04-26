@@ -1,15 +1,50 @@
 import cv2
-import json
+import ast
+import pickle
 
-if __name__ == '__main__':
-    data = json.load(open('visual_info.json', 'r'))
+def get_visual_data(target_uid):
+    all_detections_root = '../../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
     
-    u_id = data['u_id']
+    for sequence in f:
+        u_id, sequence = sequence.split("[")
+        if int(u_id) != target_uid:
+            continue
+        
+        visual_data = {"u_id": target_uid, "data": {}}
+        
+        sequence = "[" + sequence
+        sequence = ast.literal_eval(sequence)
+        
+        for occurance in sequence:
+            cam = occurance[0]
+            local_id = occurance[1]
+            
+            cam_data = pickle.load(open(f"{all_detections_root}c0{cam}.pkl", 'rb'))
+            
+            frames = cam_data[local_id]["frame_list"]
+            frames.sort()
+            first_frame = frames[0]
+            
+            mov = cam_data[local_id]["movement_info"]["mov_id"]
+            mov_frame = cam_data[local_id]["movement_info"]["frame"]
+            
+            # frames may need to be sorted 
+            # One instance had the last few bboxes at front of values() causing all drawn boxes to be out of sync
+            boxes = []
+            for frame in cam_data[local_id]["tracklet"].values():
+                boxes.append(frame['bbox'])
+
+            visual_data["data"][f"c0{cam}"] = {"start_frame": first_frame, "movement": mov,  "frame_assigned": mov_frame, "bounding_boxes": boxes}
+            
+    return visual_data
+
+def generate_videos(visual_data):
+    u_id = visual_data['u_id']
     u_id_label = f"ID: {u_id}"
     
     text = []
 
-    for cam, info in data['data'].items():
+    for cam, info in visual_data['data'].items():
         print(f"writing video {cam}")
         cam_id = int(cam[-3:])
         start_frame = int(info['start_frame'])
@@ -97,3 +132,25 @@ if __name__ == '__main__':
 
     cv2.destroyAllWindows()
 
+
+
+if __name__ == '__main__':
+    try:
+        f = open("../predicted_sequences.txt", "r")
+    except:
+        print("Prediction file not found. Have you run 'get_sequences.py'?")
+        
+    
+    target_uid = input("Enter u_id of vehicle you want visual data for\n")
+    try:
+        target_uid = int(target_uid)
+    except ValueError:
+        print("Input must be int")
+        
+        
+    visual_data = get_visual_data(target_uid)
+    if not visual_data['data']:
+        print(f'Data for vehicle {target_uid} no found')
+        exit()
+    
+    generate_videos(visual_data)
