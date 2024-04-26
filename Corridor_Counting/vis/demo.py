@@ -5,8 +5,9 @@ if __name__ == '__main__':
     data = json.load(open('visual_info.json', 'r'))
     
     u_id = data['u_id']
+    u_id_label = f"ID: {u_id}"
     
-    text = [f"ID: {u_id}"]
+    text = []
 
     for cam, info in data['data'].items():
         print(f"writing video {cam}")
@@ -60,13 +61,29 @@ if __name__ == '__main__':
             cv2.rectangle(frame, (x1, y1), (x2, y2), box_color, 2)
             
             # Write info near box
-            pos = (x1, y2)
+            
+            # id on top left corner
             font = cv2.FONT_HERSHEY_SIMPLEX
             font_scale = 1
+            text_color = (255, 255, 255) # white
+            bg_color = (0, 0, 255) # red
+            
+            text_size, _ = cv2.getTextSize(u_id_label, font, font_scale, 2)
+            
+            pos = (x1, y1)
+            box_tl = (pos[0] - 2, pos[1] - text_size[1] - 2)
+            box_br = (pos[0] + text_size[0] + 2, y1) 
+            
+            cv2.rectangle(frame, box_tl, box_br, bg_color, -1)
+            cv2.putText(frame, u_id_label, pos, font, font_scale, text_color, 2)
+            
+            # cam, movements on bottom left corner
             text_color = (0, 0, 255) # red
+            pos = (x1, y2 - 1)
             for j, line in enumerate(text):
                 if (j == len(text) - 1) and matched:
                     text_color = (255, 0, 0) # blue
+                    
                 text_size, _ = cv2.getTextSize(line, font, font_scale, 2)
                 pos = (pos[0], pos[1] + text_size[1] + 5)
                 cv2.putText(frame, line, pos, font, font_scale, text_color, 2)
