@@ -24,6 +24,7 @@ if __name__ == '__main__':
         
         cam = row['camera_id']
         if cam not in annotations:
+            print(f"No annotations provided for cam {cam}")
             continue
         mov_candidates = annotations[cam]
         
@@ -31,6 +32,9 @@ if __name__ == '__main__':
         for mov_id, candidate in enumerate(mov_candidates):
             if row['from_camera'] == f'c0{candidate[0]}' and row['to_camera'] == f'c0{candidate[1]}':
                 movement = mov_id
+                break
+        else:
+            print(f"Could not find annotation for\n{row}")
                 
         vehicles[corridor].setdefault(row['vehicle_id'], []).append((cam, row['to_frame'], movement))
     

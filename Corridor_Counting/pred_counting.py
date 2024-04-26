@@ -1,7 +1,7 @@
 import numpy as np
 import ast
 
-VIDEO_LENGTH = 5000 # number of frames in longest video
+VIDEO_LENGTH = 4300 # number of frames in longest video
 NUM_CORRIDORS = 4 # number of predefined corridors
 
 def parse_corridors(corridors_path):
