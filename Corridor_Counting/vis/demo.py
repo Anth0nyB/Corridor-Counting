@@ -101,7 +101,6 @@ def generate_videos(visual_data):
             font = cv2.FONT_HERSHEY_SIMPLEX
             font_scale = 1
             text_color = (255, 255, 255) # white
-            bg_color = (0, 0, 255) # red
             
             text_size, _ = cv2.getTextSize(u_id_label, font, font_scale, 2)
             
@@ -109,7 +108,7 @@ def generate_videos(visual_data):
             box_tl = (pos[0] - 2, pos[1] - text_size[1] - 2)
             box_br = (pos[0] + text_size[0] + 2, y1) 
             
-            cv2.rectangle(frame, box_tl, box_br, bg_color, -1)
+            cv2.rectangle(frame, box_tl, box_br, box_color, -1)
             cv2.putText(frame, u_id_label, pos, font, font_scale, text_color, 2)
             
             # cam, movements on bottom left corner
