@@ -162,7 +162,7 @@ def st_filter(st_mask, cid_tids,cid_tid_dict):
     return st_mask
 
 def subcam_list(cid_tid_dict,cid_tids):
-    adjacent_cams = [(10, 16), (16, 17), (17, 18), (18, 19), (19, 20), (20, 21), (21, 22), (22, 23), (23, 24), (24, 25), (25, 26), (26, 27), (27, 29), (29, 34), (34, 33)]    # for us these are restricted to our specific corridors of interest
+    adjacent_cams = [(10, 16), (16, 17), (17, 18), (18, 19), (19, 20), (20, 21), (21, 22), (22, 23), (23, 24), (24, 25), (25, 26), (26, 27), (27, 28), (28, 29), (29, 34), (34, 33)]    # for us these are restricted to our specific corridors of interest
     
     groupings = {}
     for cid_tid in cid_tids:

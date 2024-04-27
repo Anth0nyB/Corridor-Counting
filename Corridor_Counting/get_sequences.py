@@ -4,7 +4,7 @@ import sys
 sys.path.append('../AIC_2020_Challenge_Track-1/')
 from get_lines import *
 
-CAMS_OF_INTEREST = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 33, 34]
+CAMS_OF_INTEREST = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 33, 34]
 
 def get_sequences():
     local_to_universal_id_map = pickle.load(open('../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl', 'rb'))['cluster']
