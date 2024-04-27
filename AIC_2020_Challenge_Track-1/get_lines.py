@@ -96,7 +96,7 @@ def get_exits(cam_id):
     
     elif cam_id == 26:
         exits = [
-            [(1355, 580), (819, 584)],  # middle exit
+            [(1355, 480), (819, 484)],  # middle exit
         ]
 
     elif cam_id == 27:
@@ -104,10 +104,18 @@ def get_exits(cam_id):
             [(1120, 710), (1470, 500)],  # bottom
             [(490, 170), (670, 140)],  # top
         ]
-
+        
+    elif cam_id == 28:
+        exits = [
+            [(24, 446), (84, 535)],  # bottom left
+            [(1733, 625), (1580, 953)], # bottom right
+            [(1700, 250), (1575, 217)], # top right
+            [(550, 239), (384, 300)],   # top left
+        ]
+        
     elif cam_id == 29:
         exits = [
-            [(1250, 290), (1400, 290)],  # top
+            [(1250, 580), (1500, 580)],  # top
             [(260, 545), (990, 635)],  # bottom
         ]
 
@@ -320,6 +328,27 @@ def get_lines(cam_id):
         # c24 to c27: 1
         
         mov_exits = [0, 1, 1, 1]
+        
+    elif cam_id == 28:
+        movements= [
+            [(200, 950), (1552, 242)],  # bl straight
+            [(200, 950), (326, 272)],   # bl left
+            [(200, 950), (1655, 833)],  # bl right
+
+            [(1842, 529), (326, 272)],  # br straight
+            [(1842, 529), (116, 505)],  # br left
+            [(1842, 529), (1552, 242)],  # br right
+
+            [(1240, 236), (116, 505)],   # tr straight
+            [(1240, 236), (1655, 833)],   # tr left
+            [(1240, 236), (326, 272)],   # tr right
+
+            [(180, 318), (1655, 833)],   # tl straight
+            [(180, 318), (1552, 242)],   # tl left
+            [(180, 318), (116, 505)],   # tl right
+        ]
+
+        mov_exits = [2, 3, 1, 3, 0, 2, 0, 1, 3, 1, 2, 0]
 
     elif cam_id == 29:
         movements = [
