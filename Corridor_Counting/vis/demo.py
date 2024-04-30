@@ -21,20 +21,14 @@ def get_visual_data(target_uid):
             
             cam_data = pickle.load(open(f"{all_detections_root}c0{cam}.pkl", 'rb'))
             
-            frames = cam_data[local_id]["frame_list"]
-            frames.sort()
-            first_frame = frames[0]
-            
             mov = cam_data[local_id]["movement_info"]["mov_id"]
             mov_frame = cam_data[local_id]["movement_info"]["frame"]
             
-            # frames may need to be sorted 
-            # One instance had the last few bboxes at front of values() causing all drawn boxes to be out of sync
-            boxes = []
+            boxes = {}
             for frame in cam_data[local_id]["tracklet"].values():
-                boxes.append(frame['bbox'])
+                boxes[int(frame['frame'][3:])] = frame['bbox']
 
-            visual_data["data"][f"c0{cam}"] = {"start_frame": first_frame, "movement": mov,  "frame_assigned": mov_frame, "bounding_boxes": boxes}
+            visual_data["data"][f"c0{cam}"] = {"movement": mov,  "frame_assigned": mov_frame, "bounding_boxes": boxes}
             
     return visual_data
 
@@ -45,9 +39,9 @@ def generate_videos(visual_data):
     text = []
 
     for cam, info in visual_data['data'].items():
-        print(f"writing video {cam}")
+        print(f"Writing to {cam}_{u_id}.mp4")
+        
         cam_id = int(cam[-3:])
-        start_frame = int(info['start_frame'])
         mov_id = int(info['movement'])
         mov_frame = int(info['frame_assigned'])
         boxes = info['bounding_boxes']
@@ -61,10 +55,10 @@ def generate_videos(visual_data):
         width = int(raw_video.get(3))
         height = int(raw_video.get(4))
         codec = cv2.VideoWriter_fourcc(*'mp4v')
-        out_video = cv2.VideoWriter(f'{cam}_annotated.mp4', codec, fps, (width, height))
+        out_video = cv2.VideoWriter(f'{cam}_{u_id}.mp4', codec, fps, (width, height))
 
 
-        i = 0
+        frame_num = 0
         box_color = (0, 0, 255) # red
         matched = False
         while raw_video.isOpened():
@@ -72,36 +66,46 @@ def generate_videos(visual_data):
             if not ret:
                 break
             
-            # Skip ahead to the frame when the vehicle appears
-            if i < start_frame:
-                i += 1
+            # Write video number in top left
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            font_scale = 4
+            cam_label_color = (0, 0, 255) # red
+            cam_number = f'CAM {cam_id}'
+            
+            text_size, _ = cv2.getTextSize(cam_number, font, font_scale, 4)
+            pos = (5, text_size[1] + 5)
+            
+            cv2.putText(frame, cam_number, pos, font, font_scale, cam_label_color, 4)
+
+            # Skip frames when the vehicle doesn't have bounding box to draw
+            if frame_num not in boxes:
                 out_video.write(frame)
+                frame_num += 1
                 continue
             
             # Once vehicle disappears from view, skip to end of video
-            if len(boxes) <= i - start_frame:
-                i += 1
+            if not boxes:
                 out_video.write(frame)
+                frame_num += 1
                 continue
             
             # Change colors when movement is assigned
-            if i == mov_frame:
+            if frame_num == mov_frame:
                 box_color = (255, 0, 0) # blue
                 text.append(f"Cam {cam_id}: MOV {mov_id}")
                 matched = True
 
             # Draw bounding box
-            box = boxes[i - start_frame]
+            box = boxes[frame_num]
             x1, y1, x2, y2 = map(int, box)
             cv2.rectangle(frame, (x1, y1), (x2, y2), box_color, 2)
             
             # Write info near box
-            
             # id on top left corner
             font = cv2.FONT_HERSHEY_SIMPLEX
             font_scale = 1
             text_color = (255, 255, 255) # white
-            
+
             text_size, _ = cv2.getTextSize(u_id_label, font, font_scale, 2)
             
             pos = (x1, y1)
@@ -124,7 +128,8 @@ def generate_videos(visual_data):
             
             out_video.write(frame)
 
-            i += 1
+            del boxes[frame_num]
+            frame_num += 1
 
         raw_video.release()
         out_video.release()
