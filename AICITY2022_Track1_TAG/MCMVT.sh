@@ -9,8 +9,6 @@ python merge_reid_feat.py ${MCMT_CONFIG_FILE}
 # #### MOT ####
 cd ../tracker/MOTBaseline
 sh run_aic.sh ${MCMT_CONFIG_FILE}
-
-# #### MCMVT ####
 cd ../../reid_bidir/reid-matching/tools
 python trajectory_fusion.py ${MCMT_CONFIG_FILE}
 
@@ -18,10 +16,11 @@ python trajectory_fusion.py ${MCMT_CONFIG_FILE}
 cd ../../../../Corridor_Counting
 python assign_movements.py
 
-### MCMVT ###
+### MTMCT ###
 cd ../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools
 python sub_cluster.py ${MCMT_CONFIG_FILE}
 python gen_res.py ${MCMT_CONFIG_FILE}
-python interpolation.py ${MCMT_CONFIG_FILE}
+
+# python interpolation.py ${MCMT_CONFIG_FILE}
 
 
