@@ -38,19 +38,13 @@ if __name__ == '__main__':
             
             cam_data = pickle.load(open(f"{all_detections_root}c0{cam}.pkl", 'rb'))
             
-            frames = cam_data[local_id]["frame_list"]
-            frames.sort()
-            first_frame = frames[0]
-            
             mov = cam_data[local_id]["movement_info"]["mov_id"]
             mov_frame = cam_data[local_id]["movement_info"]["frame"]
             
-            # frames may need to be sorted 
-            # One instance had the last few bboxes at front of values() causing all drawn boxes to be out of sync
-            boxes = []
+            boxes = {}
             for frame in cam_data[local_id]["tracklet"].values():
-                boxes.append(frame['bbox'])
+                boxes[int(frame['frame'][3:])] = frame['bbox']
 
-            result["data"][f"c0{cam}"] = {"start_frame": first_frame, "movement": mov,  "frame_assigned": mov_frame, "bounding_boxes": boxes}
+            result["data"][f"c0{cam}"] = {"movement": mov,  "frame_assigned": mov_frame, "bounding_boxes": boxes}
         
         json.dump(result, outfile)
