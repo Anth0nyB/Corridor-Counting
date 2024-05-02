@@ -161,17 +161,40 @@ def st_filter(st_mask, cid_tids,cid_tid_dict):
                 st_mask[j, i] = 0.0
     return st_mask
 
-def subcam_list(cid_tid_dict,cid_tids):
-    adjacent_cams = [(10, 16), (16, 17), (17, 18), (18, 19), (19, 20), (20, 21), (21, 22), (22, 23), (23, 24), (24, 25), (25, 26), (26, 27), (27, 28), (28, 29), (29, 34), (34, 33)]    # for us these are restricted to our specific corridors of interest
+def subcam_list(cid_tid_dict,cid_tids):    
+    adjacent_cams = {
+        10: [16],
+        16: [10, 17],
+        17: [16, 18],
+        18: [17, 19],
+        19: [18, 20],
+        20: [19, 21],
+        21: [20, 22],
+        22: [21, 23],
+        23: [22, 24],
+        24: [23, 25],
+        25: [24, 26],
+        26: [25, 27],
+        27: [26, 28],
+        28: [27, 29],
+        29: [28, 34],
+        34: [29, 33],
+        33: [34],
+    }
     
     groupings = {}
     for cid_tid in cid_tids:
         if cid_tid_dict[cid_tid]['movement_info']['mov_id'] == -1:
             continue
-        cid, tid = cid_tid
-        for cam_pair in adjacent_cams:
-            if cid in cam_pair:
-                groupings.setdefault(cam_pair, []).append(cid_tid)
+        cam, tid = cid_tid
+        candidates = adjacent_cams[cam]
+        for candidate in candidates:
+            if cam < candidate:
+                cam_pair = (cam, candidate)
+            else:
+                cam_pair = (candidate, cam)
+                
+            groupings.setdefault(cam_pair, []).append(cid_tid)
             
     return groupings
 

@@ -33,6 +33,7 @@ def get_exits(cam_id):
         These values are hardcoded on a per intersection basis """
     
     # print("using exits from cam: ", cam_id)
+    exits = []
     
     if cam_id == 10:
         exits = [
@@ -190,7 +191,8 @@ def get_lines(cam_id):
     # mov_exits[i] = index of line in exits[] that movement[i] ends at
     # This is really only important for intersections with many possible movements, to reduce candidates for matching movements
     # If there aren't many intersections, it will be None, as it is not needed for matching movements
-    mov_exits = None
+    mov_exits = []
+    movements = []
     
     if cam_id == 10:
         # Each movement described as [start_point, end_point]
