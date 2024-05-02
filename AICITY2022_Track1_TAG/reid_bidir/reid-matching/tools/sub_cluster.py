@@ -95,8 +95,7 @@ def combin_feature(cid_tid_dict,sub_cluster):
     return cid_tid_dict
 
 def get_labels(_cfg, cid_tid_dict, cid_tids, score_thr):
-    dis_thrs = [0.7,0.5,0.5,0.5,0.5,
-                0.7,0.5,0.5,0.5,0.5]
+    dis_thrs = 0.1
     
     # Divide up the vehicles based on adjacent cameras to perform reid
     # This reduces the size of the clustering problem and increases accuracy
@@ -104,11 +103,11 @@ def get_labels(_cfg, cid_tid_dict, cid_tids, score_thr):
     grouped_labels = dict()
     for i,group in enumerate(grouped_cid_tids):
         sim_matrix = get_sim_matrix(_cfg,cid_tid_dict,grouped_cid_tids[group])
-        cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs[1], metric='precomputed', linkage='complete').fit_predict(1 - sim_matrix)
+        cluster_labels = AgglomerativeClustering(n_clusters=None, distance_threshold=1-dis_thrs, metric='precomputed', linkage='complete').fit_predict(1 - sim_matrix)
         labels = get_match(cluster_labels)
         cluster_cid_tids = get_cid_tid(labels,grouped_cid_tids[group])
         grouped_labels[group] = cluster_cid_tids
-    labels,sub_cluster = combin_cluster(grouped_labels,cid_tids)
+    labels,sub_cluster = combin_cluster(grouped_labels,cid_tids)    
     clustered_cid_tids = get_cid_tid(labels, cid_tids)
     
     return clustered_cid_tids
