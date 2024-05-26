@@ -1,9 +1,16 @@
 import pickle
 import os
-import sys
 import numpy as np
-sys.path.append('../AIC_2020_Challenge_Track-1/')
-from get_lines import *
+from get_annotations import *
+
+""" This algorithm was inspired by 'Countor: count without bells and whistles' (2020)
+    by Ospina and Torres
+
+    Portions of this code are from Team 26 in the 2020 AI City Challenge Track 1
+        ccw() and line_intersect() are taken from them. We used their approach 
+        for determining when a vehicle crosses an exit line
+    
+"""
 
 CAMS_OF_INTEREST = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 33, 34]
 
@@ -27,7 +34,6 @@ def rect_intersect(bbox, exit_line):
     
     return left or right or top or bottom
     
-
 #   reid_bidir/reid-matching/tools/exp/viz/validation/S05/trajectory/
 #   has dictionaries {local_ids: (all needed info)}
 #   so for each local_id, perform tracking based on bbox to match movement
@@ -35,7 +41,6 @@ if __name__ == '__main__':
     detects_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/trajectory/'
     
     movements_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
-    # local_to_universal_map = pickle.load(open('../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl', 'rb'))['cluster']
 
     for pkl_file in os.listdir(detects_root):
         # For cams whose lines are not implemented
@@ -109,7 +114,6 @@ if __name__ == '__main__':
                     
                 # Reached end of tracklet and it never crossed an exit line (ie parked cars)
                 if not matched:
-                    # print("[",tracklet[0][1]['bbox'],",", tracklet[-1][1]['bbox'], "],")
                     cam_detections[local_id]["movement_info"] = {'mov_id': -1, 'frame': -1}
 
             else:

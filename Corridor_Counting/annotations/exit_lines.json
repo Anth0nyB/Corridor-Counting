@@ -1,0 +1,104 @@
+{
+    "notes":[
+        "Each key corresponds to a camera id",
+        "Lines are given as [[x1, y1], [x2, y2]]"
+    ],
+    "10": [
+        {"exit_id": 0, "line": [[857, 300], [1200, 220]], "description": "top exit"},
+        {"exit_id": 1, "line": [[150, 900], [900, 900]], "description": "bottom exit"}
+    ],
+    "16": [
+        {"exit_id": 0, "line": [[450, 450], [1420, 450]], "description": "middle exit"}
+    ],
+    "17": [
+        {"exit_id": 0, "line": [[360, 500], [1500, 500]], "description": "middle exit"}
+    ],
+    "18": [
+        {"exit_id": 0, "line": [[1300, 1100], [2060, 1530]], "description": "middle exit"}
+    ],
+    "19": [
+        {"exit_id": 0, "line": [[715, 900], [715, 1620]], "description": "middle exit"}
+    ],
+    "20": [
+        {"exit_id": 0, "line": [[587, 1037], [1246, 746]], "description": "middle exit"}
+    ],
+    "21": [
+        {"exit_id": 0, "line": [[342, 435], [1787, 312]], "description": "middle exit"}
+    ],
+    "22": [
+        {"exit_id": 0, "line": [[100, 900], [700, 900]], "description": "bottom exit"},
+        {"exit_id": 1, "line": [[1000, 200], [1150, 200]], "description": "top exit"}
+    ],
+    "23": [
+        {"exit_id": 0, "line": [[1280, 850], [1870, 1175]], "description": "middle exit"}
+    ],
+    "24": [
+        {"exit_id": 0, "line": [[1360, 810], [1360, 1920]], "description": "middle exit"}
+    ],
+    "25": [
+        {"exit_id": 0, "line": [[966, 1163], [1315, 929]], "description": "middle exit"},
+        {"exit_id": 1, "line": [[2000, 1525], [1550, 1850]], "description": "bottom right exit"}
+    ],
+    "26": [
+        {"exit_id": 0, "line": [[1157, 312], [1328, 312]], "description": "top exit"},
+        {"exit_id": 1, "line": [[533, 1000], [921, 1000]], "description": "bottom exit"}
+    ],
+    "27": [
+        {"exit_id": 0, "line": [[1120, 710], [1470, 500]], "description": "bottom exit"},
+        {"exit_id": 1, "line": [[490, 170], [670, 140]], "description": "top exit"}
+    ],
+    "28": [
+        {"exit_id": 0, "line": [[24, 446], [84, 535]], "description": "bottom left exit"},
+        {"exit_id": 1, "line": [[1733, 625], [1580, 953]], "description": "bottom right exit"},
+        {"exit_id": 2, "line": [[1700, 250], [1575, 217]], "description": "top right exit"},
+        {"exit_id": 3, "line": [[550, 239], [384, 300]], "description": "top left exit"}
+    ],
+    "29": [
+        {"exit_id": 0, "line": [[1250, 580], [1500, 580]], "description": "top exit"},
+        {"exit_id": 1, "line": [[260, 545], [990, 635]], "description": "bottom exit"}
+    ],
+    "33": [
+        {"exit_id": 0, "line": [[1000, 400], [1560, 400]], "description": "top exit"},
+        {"exit_id": 1, "line": [[135, 765], [985, 765]], "description": "bottom exit"}
+    ],
+    "34": [
+        {"exit_id": 0, "line": [[350, 150], [430, 145]], "description": "top exit"},
+        {"exit_id": 1, "line": [[1245, 685], [1735, 555]], "description": "bottom exit"}
+    ],
+    "41": [
+        {"exit_id": 0, "line": [[65, 220], [110, 316]], "description": "bottom left exit"},
+        {"exit_id": 1, "line": [[950, 866], [1278, 575]], "description": "bottom right exit"},
+        {"exit_id": 2, "line": [[921, 167], [1096, 249]], "description": "top right exit"},
+        {"exit_id": 3, "line": [[312, 138], [416, 106]], "description": "top left exit"}
+    ],
+    "42": [
+        {"exit_id": 0, "line": [[25, 288], [49, 452]], "description": "bottom left exit"},
+        {"exit_id": 1, "line": [[850, 960], [1150, 725]], "description": "bottom right exit"},
+        {"exit_id": 2, "line": [[1009, 208], [875, 140]], "description": "top right exit"},
+        {"exit_id": 3, "line": [[357, 124], [298, 197]], "description": "top left exit"}
+    ],
+    "43": [
+        {"exit_id": 0, "line": [[10, 168], [44, 386]], "description": "bottom left exit"},
+        {"exit_id": 1, "line": [[791, 960], [1029, 719]], "description": "bottom right exit"},
+        {"exit_id": 2, "line": [[1280, 273], [1000, 190]], "description": "top right exit"},
+        {"exit_id": 3, "line": [[412, 85], [196, 124]], "description": "top left exit"}
+    ],
+    "44": [
+        {"exit_id": 0, "line": [[30, 430], [90, 635]], "description": "bottom left exit"},
+        {"exit_id": 1, "line": [[970, 610], [800, 950]], "description": "bottom right exit"},
+        {"exit_id": 2, "line": [[860, 210], [990, 240]], "description": "top right exit"},
+        {"exit_id": 3, "line": [[595, 160], [450, 210]], "description": "top left exit"}
+    ],
+    "45": [
+        {"exit_id": 0, "line": [[60, 215], [60, 340]], "description": "bottom left exit"},
+        {"exit_id": 1, "line": [[680, 710], [1200, 510]], "description": "bottom right exit"},
+        {"exit_id": 2, "line": [[1075, 150], [1230, 195]], "description": "top right exit"},
+        {"exit_id": 3, "line": [[660, 110], [465, 130]], "description": "top left exit"}
+    ],
+    "46": [
+        {"exit_id": 0, "line": [[15, 250], [15, 370]], "description": "bottom left exit"},
+        {"exit_id": 1, "line": [[730, 710], [1270, 460]], "description": "bottom right exit"},
+        {"exit_id": 2, "line": [[1075, 150], [1275, 195]], "description": "top right exit"},
+        {"exit_id": 3, "line": [[575, 110], [440, 170]], "description": "top left exit"}
+    ]
+}

@@ -1,0 +1,193 @@
+{
+    "notes": [
+        "Each key corresponds to a camera id",
+        "Movement 'vectors' are given as [start_point, end_point]",
+        "The description is the direction of travel of the movement"
+    ],
+    "10": [
+        {"movement_id": 0, "vector": [[1100, 1080], [950, 200]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[730, 130], [550, 900]], "exit": 1, "description": ""}
+    ],
+    "16": [
+        {"movement_id": 0, "vector": [[1111, 150], [800, 450]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[1500, 1000], [1200, 450]], "exit": 0, "description": ""}
+    ],
+    "17": [
+        {"movement_id": 0, "vector": [[1100, 250], [800, 500]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[1900, 770], [1250, 500]], "exit": 0, "description": ""}
+    ],
+    "18": [
+        {"movement_id": 0, "vector": [[100, 1700], [1800, 1400]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[2150, 1350], [1380, 1240]], "exit": 0, "description": ""}
+    ],
+    "19": [
+        {"movement_id": 0, "vector": [[2450, 1250], [260, 1110]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[320, 1630], [2330, 1730]], "exit": 0, "description": ""}
+    ],
+    "20": [
+        {"movement_id": 0, "vector": [[365, 769], [653, 956]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[2526, 900], [1080, 850]], "exit": 0, "description": ""}
+    ],
+    "21": [
+        {"movement_id": 0, "vector": [[948, 127], [800, 400]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[1872, 729], [1250, 400]], "exit": 0, "description": ""}
+    ],
+    "22": [
+        {"movement_id": 0, "vector": [[900, 200], [350, 900]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[1000, 1000], [1050, 200]], "exit": 1, "description": ""}
+    ],
+    "23": [
+        {"movement_id": 0, "vector": [[1900, 930], [1400, 970]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[240, 1600], [1700, 1090]], "exit": 0, "description": ""}
+    ],
+    "24": [
+        {"movement_id": 0, "vector": [[420, 1780], [2265, 1700]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[2200, 1085], [400, 1130]], "exit": 0, "description": ""}
+    ],
+    "25": [
+        {"movement_id": 0, "vector": [[2536, 1273], [1300, 1130]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[500, 1150], [2245, 1749]], "exit": 1, "description": ""}
+    ],
+    "26": [
+        {"movement_id": 0, "vector": [[1176, 1031], [1216, 538]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[1106, 156], [895, 632]], "exit": 1, "description": ""}
+    ],
+    "27": [
+        {"movement_id": 0, "vector": [[575, 235], [1710, 850]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[1550, 410], [430, 95]], "exit": 1, "description": ""}
+    ],
+    "28": [
+        {"movement_id": 0, "vector": [[200, 950], [1552, 242]], "exit": 2, "description": ""},
+        {"movement_id": 1, "vector": [[200, 950], [326, 272]], "exit": 3, "description": ""},
+        {"movement_id": 2, "vector": [[200, 950], [1655, 833]], "exit": 1, "description": ""},
+        {"movement_id": 3, "vector": [[1842, 529], [326, 272]], "exit": 3, "description": ""},
+        {"movement_id": 4, "vector": [[1842, 529], [116, 505]], "exit": 0, "description": ""},
+        {"movement_id": 5, "vector": [[1842, 529], [1552, 242]], "exit": 2, "description": ""},
+        {"movement_id": 6, "vector": [[1240, 236], [116, 505]], "exit": 0, "description": ""},
+        {"movement_id": 7, "vector": [[1240, 236], [1655, 833]], "exit": 1, "description": ""},
+        {"movement_id": 8, "vector": [[1240, 236], [326, 272]], "exit": 3, "description": ""},
+        {"movement_id": 9, "vector": [[180, 318], [1655, 833]], "exit": 1, "description": ""},
+        {"movement_id": 10, "vector": [[180, 318], [1552, 242]], "exit": 2, "description": ""},
+        {"movement_id": 11, "vector": [[180, 318], [116, 505]], "exit": 0, "description": ""}
+    ],
+    "29": [
+        {"movement_id": 0, "vector": [[920, 540], [600, 725]], "exit": 1, "description": ""},
+        {"movement_id": 1, "vector": [[1345, 410], [1340, 265]], "exit": 0, "description": ""}
+    ],
+    "33": [
+        {"movement_id": 0, "vector": [[1495, 830], [1260, 355]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[735, 360], [520, 880]], "exit": 1, "description": ""}
+    ],
+    "34": [
+        {"movement_id": 0, "vector": [[765, 255], [375, 135]], "exit": 0, "description": ""},
+        {"movement_id": 1, "vector": [[655, 325], [1660, 650]], "exit": 1, "description": ""}
+    ],
+    "41": [
+        {"movement_id": 0, "vector": [[90, 476], [1000, 189]], "exit": 2, "description": ""},
+        {"movement_id": 1, "vector": [[111, 408], [321, 126]], "exit": 3, "description": ""},
+        {"movement_id": 2, "vector": [[100, 839], [1187, 723]], "exit": 1, "description": ""},
+        {"movement_id": 3, "vector": [[111, 408], [79, 284]], "exit": 0, "description": ""},
+        {"movement_id": 4, "vector": [[1195, 515], [338, 132]], "exit": 3, "description": ""},
+        {"movement_id": 5, "vector": [[1195, 515], [72, 286]], "exit": 0, "description": ""},
+        {"movement_id": 6, "vector": [[1173, 440], [1071, 220]], "exit": 2, "description": ""},
+        {"movement_id": 7, "vector": [[1185, 483], [1103, 679]], "exit": 1, "description": ""},
+        {"movement_id": 8, "vector": [[696, 114], [76, 270]], "exit": 0, "description": ""},
+        {"movement_id": 9, "vector": [[785, 142], [1076, 719]], "exit": 1, "description": ""},
+        {"movement_id": 10, "vector": [[598, 116], [317, 127]], "exit": 3, "description": ""},
+        {"movement_id": 11, "vector": [[759, 153], [1005, 201]], "exit": 2, "description": ""},
+        {"movement_id": 12, "vector": [[228, 150], [1088, 701]], "exit": 1, "description": ""},
+        {"movement_id": 13, "vector": [[268, 137], [1019, 205]], "exit": 2, "description": ""},
+        {"movement_id": 14, "vector": [[177, 172], [76, 274]], "exit": 0, "description": ""},
+        {"movement_id": 15, "vector": [[273, 144], [314, 126]], "exit": 3, "description": ""}
+    ],
+    "42": [
+        {"movement_id": 0, "vector": [[17, 597], [902, 169]], "exit": 2, "description": ""},
+        {"movement_id": 1, "vector": [[13, 531], [277, 171]], "exit": 3, "description": ""},
+        {"movement_id": 2, "vector": [[81, 891], [1037, 889]], "exit": 1, "description": ""},
+        {"movement_id": 3, "vector": [[11, 534], [6, 413]], "exit": 0, "description": ""},
+        {"movement_id": 4, "vector": [[1046, 450], [286, 170]], "exit": 3, "description": ""},
+        {"movement_id": 5, "vector": [[971, 519], [10, 396]], "exit": 0, "description": ""},
+        {"movement_id": 6, "vector": [[1045, 420], [959, 186]], "exit": 2, "description": ""},
+        {"movement_id": 7, "vector": [[967, 519], [1008, 869]], "exit": 1, "description": ""},
+        {"movement_id": 8, "vector": [[649, 136], [10, 376]], "exit": 0, "description": ""},
+        {"movement_id": 9, "vector": [[698, 145], [1058, 831]], "exit": 1, "description": ""},
+        {"movement_id": 10, "vector": [[578, 126], [283, 173]], "exit": 3, "description": ""},
+        {"movement_id": 11, "vector": [[681, 146], [904, 186]], "exit": 2, "description": ""},
+        {"movement_id": 12, "vector": [[168, 219], [1041, 805]], "exit": 1, "description": ""},
+        {"movement_id": 13, "vector": [[230, 200], [892, 185]], "exit": 2, "description": ""},
+        {"movement_id": 14, "vector": [[81, 267], [8, 358]], "exit": 0, "description": ""},
+        {"movement_id": 15, "vector": [[230, 198], [288, 168]], "exit": 3, "description": ""}
+    ],
+    "43": [
+        {"movement_id": 0, "vector": [[46, 581], [1171, 210]], "exit": 2, "description": ""},
+        {"movement_id": 1, "vector": [[55, 466], [238, 116]], "exit": 3, "description": ""},
+        {"movement_id": 2, "vector": [[118, 898], [1039, 907]], "exit": 1, "description": ""},
+        {"movement_id": 3, "vector": [[57, 471], [11, 309]], "exit": 0, "description": ""},
+        {"movement_id": 4, "vector": [[1257, 592], [249, 119]], "exit": 3, "description": ""},
+        {"movement_id": 5, "vector": [[1202, 710], [22, 315]], "exit": 0, "description": ""},
+        {"movement_id": 6, "vector": [[1269, 485], [1226, 221]], "exit": 2, "description": ""},
+        {"movement_id": 7, "vector": [[1185, 712], [1058, 909]], "exit": 1, "description": ""},
+        {"movement_id": 8, "vector": [[718, 117], [3, 285]], "exit": 0, "description": ""},
+        {"movement_id": 9, "vector": [[811, 147], [1051, 910]], "exit": 1, "description": ""},
+        {"movement_id": 10, "vector": [[615, 106], [254, 111]], "exit": 3, "description": ""},
+        {"movement_id": 11, "vector": [[815, 144], [1176, 230]], "exit": 2, "description": ""},
+        {"movement_id": 12, "vector": [[128, 164], [1072, 912]], "exit": 1, "description": ""},
+        {"movement_id": 13, "vector": [[181, 152], [1171, 213]], "exit": 2, "description": ""},
+        {"movement_id": 14, "vector": [[30, 183], [3, 307]], "exit": 0, "description": ""},
+        {"movement_id": 15, "vector": [[189, 161], [257, 119]], "exit": 3, "description": ""}
+    ],
+    "44": [
+        {"movement_id": 0, "vector": [[100, 700], [940, 230]], "exit": 2, "description": ""},
+        {"movement_id": 1, "vector": [[100, 700], [530, 180]], "exit": 3, "description": ""},
+        {"movement_id": 2, "vector": [[150, 850], [870, 810]], "exit": 1, "description": ""},
+        {"movement_id": 3, "vector": [[100, 700], [55, 525]], "exit": 0, "description": ""},
+        {"movement_id": 4, "vector": [[1130, 385], [530, 180]], "exit": 3, "description": ""},
+        {"movement_id": 5, "vector": [[1150, 465], [55, 525]], "exit": 0, "description": ""},
+        {"movement_id": 6, "vector": [[1140, 360], [940, 230]], "exit": 2, "description": ""},
+        {"movement_id": 7, "vector": [[1150, 465], [920, 720]], "exit": 1, "description": ""},
+        {"movement_id": 8, "vector": [[860, 190], [55, 525]], "exit": 0, "description": ""},
+        {"movement_id": 9, "vector": [[860, 190], [895, 755]], "exit": 1, "description": ""},
+        {"movement_id": 10, "vector": [[790, 180], [530, 180]], "exit": 3, "description": ""},
+        {"movement_id": 11, "vector": [[860, 190], [905, 225]], "exit": 2, "description": ""},
+        {"movement_id": 12, "vector": [[205, 310], [895, 760]], "exit": 1, "description": ""},
+        {"movement_id": 13, "vector": [[330, 260], [920, 225]], "exit": 2, "description": ""},
+        {"movement_id": 14, "vector": [[100, 350], [45, 480]], "exit": 0, "description": ""},
+        {"movement_id": 15, "vector": [[360, 250], [500, 195]], "exit": 3, "description": ""}
+    ],
+    "45": [
+        {"movement_id": 0, "vector": [[40, 490], [1150, 170]], "exit": 2, "description": ""},
+        {"movement_id": 1, "vector": [[40, 425], [560, 120]], "exit": 3, "description": ""},
+        {"movement_id": 2, "vector": [[50, 630], [705, 700]], "exit": 1, "description": ""},
+        {"movement_id": 3, "vector": [[40, 375], [50, 275]], "exit": 0, "description": ""},
+        {"movement_id": 4, "vector": [[1270, 335], [560, 120]], "exit": 3, "description": ""},
+        {"movement_id": 5, "vector": [[1270, 335], [40, 275]], "exit": 0, "description": ""},
+        {"movement_id": 6, "vector": [[1270, 310], [1150, 170]], "exit": 2, "description": ""},
+        {"movement_id": 7, "vector": [[1230, 425], [1100, 540]], "exit": 1, "description": ""},
+        {"movement_id": 8, "vector": [[890, 140], [40, 275]], "exit": 0, "description": ""},
+        {"movement_id": 9, "vector": [[940, 155], [1120, 640]], "exit": 1, "description": ""},
+        {"movement_id": 10, "vector": [[890, 140], [560, 120]], "exit": 3, "description": ""},
+        {"movement_id": 11, "vector": [[970, 155], [1150, 170]], "exit": 2, "description": ""},
+        {"movement_id": 12, "vector": [[320, 155], [1020, 640]], "exit": 1, "description": ""},
+        {"movement_id": 13, "vector": [[415, 135], [1150, 170]], "exit": 2, "description": ""},
+        {"movement_id": 14, "vector": [[190, 175], [40, 275]], "exit": 0, "description": ""},
+        {"movement_id": 15, "vector": [[415, 135], [560, 120]], "exit": 3, "description": ""}
+    ],
+    "46": [
+        {"movement_id": 0, "vector": [[10, 710], [1175, 173]], "exit": 2, "description": ""},
+        {"movement_id": 1, "vector": [[10, 450], [495, 150]], "exit": 3, "description": ""},
+        {"movement_id": 2, "vector": [[10, 700], [760, 700]], "exit": 1, "description": ""},
+        {"movement_id": 3, "vector": [[10, 450], [10, 300]], "exit": 0, "description": ""},
+        {"movement_id": 4, "vector": [[1270, 335], [495, 150]], "exit": 3, "description": ""},
+        {"movement_id": 5, "vector": [[1270, 335], [10, 300]], "exit": 0, "description": ""},
+        {"movement_id": 6, "vector": [[1270, 310], [1175, 173]], "exit": 2, "description": ""},
+        {"movement_id": 7, "vector": [[1270, 375], [1140, 550]], "exit": 1, "description": ""},
+        {"movement_id": 8, "vector": [[827, 136], [10, 300]], "exit": 0, "description": ""},
+        {"movement_id": 9, "vector": [[940, 155], [1160, 660]], "exit": 1, "description": ""},
+        {"movement_id": 10, "vector": [[750, 130], [495, 150]], "exit": 3, "description": ""},
+        {"movement_id": 11, "vector": [[970, 155], [1175, 173]], "exit": 2, "description": ""},
+        {"movement_id": 12, "vector": [[255, 210], [870, 647]], "exit": 1, "description": ""},
+        {"movement_id": 13, "vector": [[358, 187], [1175, 173]], "exit": 2, "description": ""},
+        {"movement_id": 14, "vector": [[155, 218], [10, 300]], "exit": 0, "description": ""},
+        {"movement_id": 15, "vector": [[385, 180], [495, 150]], "exit": 3, "description": ""}
+    ]
+}
