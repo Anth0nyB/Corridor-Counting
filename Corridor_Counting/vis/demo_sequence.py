@@ -2,8 +2,10 @@ import cv2
 import ast
 import pickle
 
+""" Generates demo videos for the results of tracking vehicle movements """
+
 def get_visual_data(target_uid):
-    all_detections_root = '../../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
+    all_detections_root = '../../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement'
     
     for sequence in f:
         u_id, sequence = sequence.split("[")
@@ -19,7 +21,7 @@ def get_visual_data(target_uid):
             cam = occurance[0]
             local_id = occurance[1]
             
-            cam_data = pickle.load(open(f"{all_detections_root}c0{cam}.pkl", 'rb'))
+            cam_data = pickle.load(open(f"{all_detections_root}/c0{cam}.pkl", 'rb'))
             
             mov = cam_data[local_id]["movement_info"]["mov_id"]
             mov_frame = cam_data[local_id]["movement_info"]["frame"]
@@ -39,7 +41,7 @@ def generate_videos(visual_data):
     text = []
 
     for cam, info in visual_data['data'].items():
-        print(f"Writing to {cam}_{u_id}.mp4")
+        print(f"Writing to cam{cam}_id{u_id}.mp4")
         
         cam_id = int(cam[-3:])
         mov_id = int(info['movement'])
@@ -55,7 +57,7 @@ def generate_videos(visual_data):
         width = int(raw_video.get(3))
         height = int(raw_video.get(4))
         codec = cv2.VideoWriter_fourcc(*'mp4v')
-        out_video = cv2.VideoWriter(f'{cam}_{u_id}.mp4', codec, fps, (width, height))
+        out_video = cv2.VideoWriter(f'cam{cam}_id{u_id}.mp4', codec, fps, (width, height))
 
 
         frame_num = 0
@@ -154,7 +156,7 @@ if __name__ == '__main__':
         
     visual_data = get_visual_data(target_uid)
     if not visual_data['data']:
-        print(f'Data for vehicle {target_uid} no found')
+        print(f'Data for vehicle {target_uid} not found')
         exit()
     
     generate_videos(visual_data)
