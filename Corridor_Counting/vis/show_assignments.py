@@ -3,7 +3,7 @@ import pickle
 import cv2
 import sys
 sys.path.append("../")
-from get_annotations import *
+from annotations.get_annotations import *
 from PIL import Image, ImageDraw
 
 

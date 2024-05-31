@@ -2,7 +2,7 @@ import cv2
 from PIL import Image, ImageDraw
 import sys
 sys.path.append("../")
-from get_annotations import *
+from annotations.get_annotations import *
 
 """ Draws the annotated exit lines and movement vectors """
 

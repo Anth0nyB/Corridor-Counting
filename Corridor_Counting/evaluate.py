@@ -1,21 +1,12 @@
-import os
-import sys
-sys.path.append("ground_truth/")
-from pred_counting import *
-from gt_counting import *
-from get_sequences import *
-
+from prediction_counting import *
+from ground_truth.gt_counting import *
 from math import sqrt
 
 if __name__ == '__main__':
-    gt = gt_counts('ground_truth/corridors.txt', 'ground_truth/gt_sequences.txt')
+    gt = gt_counts('annotations/corridors.json', "ground_truth/ccd.csv")
+    pred = pred_counts('annotations/corridors.json')
     
-    if not os.path.exists('predicted_sequences.txt'):
-        pred_sequences = get_sequences()
-        write_sequences(pred_sequences)
-    pred = pred_counts('ground_truth/corridors.txt', 'predicted_sequences.txt')
-    
-    k = 50
+    k = 200
     segment_size = int(VIDEO_LENGTH / k)
     
     for corridor, counts in enumerate(gt):

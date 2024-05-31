@@ -1,7 +1,7 @@
 import pickle
 import os
 import numpy as np
-from get_annotations import *
+from annotations.get_annotations import *
 
 """ This algorithm was inspired by 'Countor: count without bells and whistles' (2020)
     by Ospina and Torres
