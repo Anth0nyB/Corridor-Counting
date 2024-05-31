@@ -1,0 +1,64 @@
+{
+    "notes": [
+        "Each corridor is defined below",
+        "Each corridor consists of two sequences which define the corridor. For these corridors the two sequences describe opposite directions of travel"
+    ],
+    "corridor 0": {
+        "sequence 0": [
+            {"cam": 16, "movement": 1},
+            {"cam": 17, "movement": 0},
+            {"cam": 18, "movement": 1},
+            {"cam": 20, "movement": 1},
+            {"cam": 21, "movement": 1},
+            {"cam": 22, "movement": 0},
+            {"cam": 23, "movement": 0},
+            {"cam": 25, "movement": 0}
+        ],
+        "sequence 1": [
+            {"cam": 25, "movement": 1},
+            {"cam": 23, "movement": 1},
+            {"cam": 22, "movement": 1},
+            {"cam": 21, "movement": 0},
+            {"cam": 20, "movement": 0},
+            {"cam": 18, "movement": 0},
+            {"cam": 17, "movement": 1},
+            {"cam": 16, "movement": 0}
+        ]
+    },
+    "corridor 1": {
+        "sequence 0": [
+            {"cam": 19, "movement": 0},
+            {"cam": 24, "movement": 1},
+            {"cam": 26, "movement": 0}
+        ],
+        "sequence 1": [
+            {"cam": 26, "movement": 1},
+            {"cam": 24, "movement": 0},
+            {"cam": 19, "movement": 1}
+        ]
+    },
+    "corridor 2": {
+        "sequence 0": [
+            {"cam": 19, "movement": 0},
+            {"cam": 24, "movement": 1},
+            {"cam": 27, "movement": 0}
+        ],
+        "sequence 1": [
+            {"cam": 27, "movement": 1},
+            {"cam": 24, "movement": 0},
+            {"cam": 19, "movement": 1}
+        ]
+    },
+    "corridor 3": {
+        "sequence 0": [
+            {"cam": 29, "movement": 0},
+            {"cam": 34, "movement": 1},
+            {"cam": 33, "movement": 0}
+        ],
+        "sequence 1": [
+            {"cam": 33, "movement": 1},
+            {"cam": 34, "movement": 0},
+            {"cam": 29, "movement": 1}
+        ]
+    }
+}

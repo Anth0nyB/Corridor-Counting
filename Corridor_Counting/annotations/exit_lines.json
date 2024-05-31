@@ -1,5 +1,6 @@
 {
-    "notes":[
+    "notes": [
+        "The definitions the exit lines used in movement matching are below",
         "Each key corresponds to a camera id",
         "Lines are given as [[x1, y1], [x2, y2]]"
     ],
