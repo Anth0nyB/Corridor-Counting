@@ -31,15 +31,20 @@ def get_sequences():
     return sequences
     
             
-def write_sequences(sequences):
-    with open('predicted_sequences.txt', 'w') as f:
-        for u_id, sequence in sequences.items():
-            if len(sequence) == 1 and sequence[0][1] == -1:
-                continue
+def write_sequences(sequences, out_file):
+    out_data = {}
+    for u_id, sequence in sequences.items():
+        # Filter out any vehicles that only appear once and aren't given a movement
+        if len(sequence) == 1 and sequence[0][1] == -1:
+            continue
+        
+        # Sort the vehicle's movement sequence based on which frame it appears for each camera
+        sequences[u_id] = sorted(sequence, key=lambda x: x[2])
+        
+        out_data[u_id] = sequences[u_id]
             
-            sequences[u_id] = sorted(sequence, key=lambda x: x[2])
-            f.write(f"{u_id} {sequences[u_id]}\n")
+    json.dump(out_data, open(out_file, "w"))
             
 if __name__ == '__main__':
     sequences = get_sequences()
-    write_sequences(sequences)
+    write_sequences(sequences, "predicted_sequences.json")
