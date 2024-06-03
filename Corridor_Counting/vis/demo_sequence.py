@@ -1,21 +1,28 @@
 import cv2
-import ast
 import pickle
+import sys
+sys.path.append("../")
+from prediction_counting import *
 
-""" Generates demo videos for the results of tracking vehicle movements """
+""" Generates demo videos to show tracked vehicle sequences """
 
 def get_visual_data(target_uid):
-    all_detections_root = '../../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement'
+    if os.path.exists("../predicted_sequences.json"):
+        print("loading vehicle movement sequences from '../predicted_sequences.json'")
+        sequences = json.load(open("../predicted_sequences.json", "r"))
+    else:
+        print("Determining vehicle sequences...")
+            
+        all_detections_root = '../../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement'
+        test_cluster_path = '../../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl'
+        
+        sequences = get_predicted_sequences(test_cluster_path, all_detections_root)
     
-    for sequence in f:
-        u_id, sequence = sequence.split("[")
+    for u_id, sequence in sequences.items():
         if int(u_id) != target_uid:
             continue
         
         visual_data = {"u_id": target_uid, "data": {}}
-        
-        sequence = "[" + sequence
-        sequence = ast.literal_eval(sequence)
         
         for occurance in sequence:
             cam = occurance[0]
@@ -41,7 +48,7 @@ def generate_videos(visual_data):
     text = []
 
     for cam, info in visual_data['data'].items():
-        print(f"Writing to cam{cam}_id{u_id}.mp4")
+        print(f"Writing to {cam}_id{u_id}.mp4")
         
         cam_id = int(cam[-3:])
         mov_id = int(info['movement'])
@@ -57,9 +64,9 @@ def generate_videos(visual_data):
         width = int(raw_video.get(3))
         height = int(raw_video.get(4))
         codec = cv2.VideoWriter_fourcc(*'mp4v')
-        out_video = cv2.VideoWriter(f'cam{cam}_id{u_id}.mp4', codec, fps, (width, height))
+        out_video = cv2.VideoWriter(f'{cam}_id{u_id}.mp4', codec, fps, (width, height))
 
-
+        time_since_last_appearance = 20
         frame_num = 0
         box_color = (0, 0, 255) # red
         matched = False
@@ -78,16 +85,20 @@ def generate_videos(visual_data):
             pos = (5, text_size[1] + 5)
             
             cv2.putText(frame, cam_number, pos, font, font_scale, cam_label_color, 4)
-
-            # Skip frames when the vehicle doesn't have bounding box to draw
+            
+            # Skip frames from before the vehicle appears
             if frame_num not in boxes:
-                out_video.write(frame)
+                time_since_last_appearance += 1
+                # If bounding box misses a frame for whatever reason, don't skip that frame
+                if time_since_last_appearance < 20:
+                    out_video.write(frame)
                 frame_num += 1
                 continue
             
+            time_since_last_appearance = 0
+                        
             # Once vehicle disappears from view, skip to end of video
             if not boxes:
-                out_video.write(frame)
                 frame_num += 1
                 continue
             
@@ -141,12 +152,6 @@ def generate_videos(visual_data):
 
 
 if __name__ == '__main__':
-    try:
-        f = open("../predicted_sequences.txt", "r")
-    except:
-        print("Prediction file not found. Have you run 'get_sequences.py'?")
-        
-    
     target_uid = input("Enter u_id of vehicle you want visual data for\n")
     try:
         target_uid = int(target_uid)

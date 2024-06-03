@@ -1,7 +1,9 @@
+import argparse
 import json
 import os
 import pickle
 import numpy as np
+import pandas as pd
 
 VIDEO_LENGTH = 4300 # number of frames in longest video
 NUM_CORRIDORS = 4 # number of predefined corridors
@@ -57,17 +59,26 @@ def get_predicted_sequences(test_cluster_path, all_detections_root):
     return filtered_sequences    
 
 
-def pred_counts(corridors_path, *, save_predicted_sequences = False):
+def pred_counts(corridors_path, *, save_predicted_sequences = False, recompute = False):
     corridors = parse_corridors(corridors_path)
     
-    test_cluster_path = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl'
-    all_detections_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
-    predictions = get_predicted_sequences(test_cluster_path, all_detections_root)
+    if os.path.exists("predicted_sequences.json") and not recompute:
+        print("loading vehicle movement sequences from 'predicted_sequences.json'")
+        predictions = json.load(open("predicted_sequences.json", "r"))
+    else:
+        print("computing vehicle movement sequences...")
+        test_cluster_path = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl'
+        all_detections_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
+        predictions = get_predicted_sequences(test_cluster_path, all_detections_root)
     
-    if save_predicted_sequences:
-        json.dump(predictions, open("predicted_sequences.json", "w"))
+        if save_predicted_sequences:
+            print("saving vehicle movement sequences to 'predicted_sequences.json'")
+            json.dump(predictions, open("predicted_sequences.json", "w"))
     
-    # Get counts based on predefined corridors
+    # Get counts based on predefined corridors.
+    # A frame by frame view of the corridor counts 
+    # where row i corresponds to the corridor i counts
+    # and column j corresponds to the count through frame j.
     predicted_counts = np.zeros(shape=(NUM_CORRIDORS, VIDEO_LENGTH))
         
     for u_id, movs in predictions.items():
@@ -83,14 +94,26 @@ def pred_counts(corridors_path, *, save_predicted_sequences = False):
                 for j in range(frame, VIDEO_LENGTH):
                     predicted_counts[cor_id][j] += 1
                     
-    # A frame by frame view of the corridor counts 
-    # where row i corresponds to the corridor i counts
-    # and column j corresponds to the count through frame j 
+    
+    # Results saved in csv in case they are needed 
+    print("saving predicted corridor counts to 'predicted_counts.csv'")
+    to_save = pd.DataFrame(predicted_counts)
+    to_save = to_save.astype(int)
+    to_save.index = [f'Corridor {i}' for i in range(0, len(to_save))]
+    to_save.columns.name = "Frame"
+    to_save.to_csv("predicted_counts.csv", sep=",")
+    
     return predicted_counts
     
 
 if __name__ == '__main__':
-    print(pred_counts("annotations/corridors.json"))
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', action='store_true', help="Save the intermediate vehicle movement sequences to 'predicted_sequences.json'")
+    parser.add_argument('-f', action='store_true', help="Force recompute the vehicle movement sequences instead of loading from 'predicted_sequences.json'")
+
+    args = parser.parse_args()
+
+    pred_counts("annotations/corridors.json", save_predicted_sequences=args.s, recompute=args.f)
         
     
                     
