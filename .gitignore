@@ -7,5 +7,11 @@
 */venv
 */reid_bidir/reid-matching/tools/exp
 **/__pycache__
-*/console.out
+**/console.out
 **/*.pkl
+Corridor_Counting/predicted_counts.csv
+Corridor_Counting/predicted_sequences.json
+AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/log.txt
+AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/track1.txt
+AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/track1_interpolation.txt
+AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl
