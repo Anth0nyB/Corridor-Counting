@@ -24,19 +24,12 @@ def parse_corridors(corridors_path):
 
 """ Converts ground truth format of 'from c0xx to c0xx' into movement ids """
 def get_gt_sequences(original_gt_filepath):
-    # 10: [(10, 16), (16, 10)]
-    # means for c010
-    # from c010 to c016 is movement id 0
-    # from c016 to c010 is movement id 1
-    annotations = {10: [(10, 16), (16, 10)], 16: [(16, 17), (17, 16)], 17: [(18, 16), (16, 18)], 18: [(17, 20), (20, 17)], 19: [(24, 19), (19, 24)], 20: [(18, 21), (21, 18)], 21: [(20, 22), (22, 20)], 22: [(23, 21), (21, 23)], 23: [(25, 22), (22, 25)], 24: [(19, 27), (27, 19)], 25: [(25, 23), (23, 25)], 26: [(26, 24), (24, 26)], 27: [(27, 24), (24, 27)], 29: [(33, 29), (29, 33)], 33: [(34, 29), (29, 34)], 34: [(33, 34), (34, 33)]}
+    conversions = json.load(open("convert.json", "r"))
 
     data = pd.read_csv(original_gt_filepath)
     data['camera_id'] = data['camera_id'].apply(lambda x: int(x[-3:]))
-    
-    # just to make consistent annotations for c024 to make translation easier
-    temp = data.loc[data['camera_id'] == 24]
-    temp = temp[['from_camera', 'to_camera']].replace("c026", "c027")
-    data.loc[data['camera_id'] == 24, ['from_camera', 'to_camera']] = temp
+    data['from_camera'] = data['from_camera'].apply(lambda x: x if pd.isna(x) else int(x[-3:]))
+    data['to_camera'] = data['to_camera'].apply(lambda x: x if pd.isna(x) else int(x[-3:]))
     
     # Read in the data and convert to 'movement id' format
     # The format is as follows:
@@ -47,21 +40,22 @@ def get_gt_sequences(original_gt_filepath):
         corridor = row['corridor_id']
         vehicles.setdefault(corridor, {})
         
-        cam = row['camera_id']
-        if cam not in annotations:
-            print(f"No annotations provided for cam {cam}")
+        cam = str(row['camera_id'])
+        if cam not in conversions.keys():
+            print(f"No conversions provided for cam {cam}")
             continue
-        mov_candidates = annotations[cam]
+        mov_candidates = conversions[cam]
         
         movement = -1
-        for mov_id, candidate in enumerate(mov_candidates):
-            if row['from_camera'] == f'c0{candidate[0]}' and row['to_camera'] == f'c0{candidate[1]}':
-                movement = mov_id
+        for candidate in mov_candidates:
+            if row['from_camera'] == candidate["from_camera"] and row['to_camera'] == candidate["to_camera"]:
+                movement = candidate["movement_id"]
                 break
         else:
-            print(f"Could not find annotation for\n{row}")
+            print(f"Could not find conversion for\n{row}")
+            pass
                 
-        vehicles[corridor].setdefault(row['vehicle_id'], []).append((cam, row['to_frame'], movement))
+        vehicles[corridor].setdefault(row['vehicle_id'], []).append((int(cam), row['to_frame'], movement))
     
     
     # Combine the corridors and assign universal ids (u_ids are not necessary for gt)
