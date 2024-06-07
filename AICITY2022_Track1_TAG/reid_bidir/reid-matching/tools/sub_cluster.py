@@ -23,7 +23,7 @@ def get_sim_matrix(_cfg,cid_tid_dict,cid_tids):
     # visual rerank
     visual_sim_matrix = visual_rerank(q_arr, g_arr, cid_tids, _cfg)
     visual_sim_matrix = visual_sim_matrix.astype('float32')
-    print(visual_sim_matrix)
+    
     # merge result
     np.set_printoptions(precision=3)
     sim_matrix = visual_sim_matrix * st_mask
@@ -95,7 +95,7 @@ def combin_feature(cid_tid_dict,sub_cluster):
     return cid_tid_dict
 
 def get_labels(_cfg, cid_tid_dict, cid_tids, score_thr):
-    dis_thrs = 0.1
+    dis_thrs = 0.1  # hyperparameter, could probably use some optimization
     
     # Divide up the vehicles based on adjacent cameras to perform reid
     # This reduces the size of the clustering problem and increases accuracy
