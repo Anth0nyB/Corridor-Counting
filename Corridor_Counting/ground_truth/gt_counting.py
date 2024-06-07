@@ -1,11 +1,13 @@
 import numpy as np
 import pandas as pd
 import json
+import os
 
 VIDEO_LENGTH = 4300 # number of frames in longest video
 NUM_CORRIDORS = 4 # number of predefined corridors
 
-def parse_corridors(corridors_path):
+def parse_corridors(annotations_dir):
+    corridors_path = os.path.join(annotations_dir, "corridors.json")
     corridors = json.load(open(corridors_path, "r"))
     
     parsed_corridors = []
@@ -23,9 +25,11 @@ def parse_corridors(corridors_path):
 
 
 """ Converts ground truth format of 'from c0xx to c0xx' into movement ids """
-def get_gt_sequences(original_gt_filepath):
-    conversions = json.load(open("convert.json", "r"))
+def get_gt_sequences(gt_dir):
+    conversions_path = os.path.join(gt_dir, "conversions.json")
+    conversions = json.load(open(conversions_path, "r"))
 
+    original_gt_filepath = os.path.join(gt_dir, "ccd.csv")
     data = pd.read_csv(original_gt_filepath)
     data['camera_id'] = data['camera_id'].apply(lambda x: int(x[-3:]))
     data['from_camera'] = data['from_camera'].apply(lambda x: x if pd.isna(x) else int(x[-3:]))
@@ -82,9 +86,10 @@ def get_gt_sequences(original_gt_filepath):
 
     return sequences
 
-def gt_counts(corridors_path, original_gt_filepath):
-    corridors = parse_corridors(corridors_path)
-    gt_data = get_gt_sequences(original_gt_filepath)
+# def gt_counts(corridors_path, original_gt_filepath):
+def gt_counts(annotations_dir, gt_dir):
+    corridors = parse_corridors(annotations_dir)
+    gt_data = get_gt_sequences(gt_dir)
     
     # Get counts based on predefined corridors
     counts = np.zeros(shape=(NUM_CORRIDORS, VIDEO_LENGTH))
@@ -108,7 +113,7 @@ def gt_counts(corridors_path, original_gt_filepath):
     return counts
 
 if __name__ == '__main__':
-    print(gt_counts('../annotations/corridors.json', "ccd.csv"))
+    print(gt_counts('../annotations', "./"))
     
                     
                     

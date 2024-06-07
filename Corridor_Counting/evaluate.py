@@ -1,13 +1,18 @@
+import argparse
 from prediction_counting import *
 from ground_truth.gt_counting import *
 from math import sqrt
 
 if __name__ == '__main__':
-    gt = gt_counts('annotations/corridors.json', "ground_truth/ccd.csv")
-    pred = pred_counts('annotations/corridors.json')
-    
-    k = 200
+    parser = argparse.ArgumentParser()
+    parser.add_argument('k', type=int, help="The number of segments, k, to separate the counts into when calculating wRMSE")
+    args = parser.parse_args()
+
+    k = args.k
     segment_size = int(VIDEO_LENGTH / k)
+    
+    gt = gt_counts('annotations/', "ground_truth/")
+    pred = pred_counts('annotations/corridors.json')
     
     for corridor, counts in enumerate(gt):
         true_count = counts[-1]

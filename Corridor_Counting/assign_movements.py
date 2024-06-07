@@ -39,8 +39,12 @@ def rect_intersect(bbox, exit_line):
 #   so for each local_id, perform tracking based on bbox to match movement
 if __name__ == '__main__':    
     detects_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/trajectory/'
+    if not os.path.isdir(detects_root):
+        print(f"ERROR: Trajectories directory not found {os.path.abspath(detects_root)}")
     
     movements_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
+    if not os.path.isdir(movements_root):
+        os.makedirs('../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/')
 
     for pkl_file in os.listdir(detects_root):
         # For cams whose lines are not implemented
