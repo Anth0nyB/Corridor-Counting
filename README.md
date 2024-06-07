@@ -4,19 +4,12 @@ By _Anthony Bryson, Vincent Zhou, Amy Ha_
 
 ## Setup
 
-In `AIC_2020_Challenge_Track-1/run.sh` and `AICITY2022_Track1_TAG/run.sh` replace _<user_email>_ with your email.
+In `Corridor_Counting/CC.sh` replace _<user_email>_ with your email.
 
 Make use of `virtualenv` to set up the environments for each module.
 
 ```
 pip install virtualenv
-```
-
-### MTMCT Module
-
-To set up the mtmct module use the following commands.
-
-```
 cd AICITY2022_Track1_TAG
 virtualenv -p python3.6 venv
 source venv/bin/activate
@@ -24,17 +17,23 @@ pip install -r detector/yolov5/requirements.txt
 deactivate
 ```
 
-Follow the instructions in `AICITY2022_Track1_TAG/README.md` to download the already trained ReID models and the detection model _yolov5x.pt_.
-NOTE: Don't download any datasets and you don't need to run `bash gen_det.sh aic.yml`.
+### MTMCT Module
+
+Pre-trained ReID models can be downloaded from [here](https://drive.google.com/drive/folders/1trYAwgsnB414IHcDfkqGSOTJzet0vkvx?usp=sharing). Put ReID models into the folder `AICITY2022_Track1_TAG/reid_bidir/reid_model/`.
+
+Download the [yolov5x model](https://github.com/ultralytics/yolov5/releases/download/v4.0/yolov5x.pt) (pretrained on COCO), and put it into the folder `AICITY2022_Track1_TAG/detector/yolov5/`.
 
 ## Running our solution
 
 You can either run the full pipeline, or if some results have already been generated you can run the appropritate components.
 
+The final corridor counts will be generated in `Corridor_Counting/predicted_counts.csv`
+
 ### Run the full pipeline
 
 ```
-sbatch run.sh
+cd Corridor_Counting
+sbatch CC.sh
 ```
 
 ### Run the components individually
@@ -71,9 +70,16 @@ cd ../..
 bash MCMVT.sh
 ```
 
+Count the vehicles that complete each corridor.
+
+```
+cd ../Corridor_Counting
+python prediction_counting.py -s -f
+```
+
 ## Evaluating the results
 
-We use the normalized weighted root mean squared error (nwRMSE) as described by the [2020 AI City Challenge Track 1](https://www.aicitychallenge.org/2020-data-and-evaluation/) to calculate an effectiveness score. For this we split the videos into k=50 segments.
+We use the normalized weighted root mean squared error (nwRMSE) as described by the [2020 AI City Challenge Track 1](https://www.aicitychallenge.org/2020-data-and-evaluation/) to calculate an effectiveness score. For this we split the videos into k=200 segments.
 
 Our evaluation script can be run as follows:
 
@@ -81,5 +87,3 @@ Our evaluation script can be run as follows:
 cd Corridor_Counting
 python evaluate.py
 ```
-
-NOTE: This requires the ground truth be properly formatted. In `Corridor_Counting/ground_truth` we provide a script that formatted `ccd.csv` into `gt_sequence.txt` as an example.
