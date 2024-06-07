@@ -1,0 +1,50 @@
+Anthony:
+
+- Code:
+    * movement and exit annotations for cameras in corridor 0 (Corridor_Counting/annotations/movement_vectors.json and Corridor_Counting/annotations/exit_lines.json)
+    * annotations to define each corridor (Corridor_Counting/annotations/corridors.json)
+    * annotations for converting ground truth 'from_camera' 'to_camera' values to 'movement_id' (Corridor_Counting/ground_truth/conversions.json)
+
+    * changed baseline code to work with our dataset (described in baseline.txt)
+    * implemented algorithm to assign vehicles a movement id based on the annotations (Corridor_Counting/assign_movements.py)
+    * implemented algorithm to extract the sequence of movements each vehicle makes and perform counting (Corridor_Counting/prediction_counting.py)
+    * created script to run the full pipeline (Corridor_Counting/CC.sh)
+    
+    * created script to convert ground truth format and perform counting on gt annotations (Corridor_Counting/ground_truth/gt_counting.py)
+    * implemented the wRMSE and nwRMSE evaluation metric from AIC20 Track 1 (Corridor_Counting/evaluation.py)
+
+    * created script to draw vehicle assignments for verifying accuracy of the movement and exit annotations (Corridor_Counting/vis/show_assignments.py)
+    * created script to generate images/videos of the detection, single-camera tracking, and multi-camera tracking phases of the pipeline for the presentation (Corridor_Counting/vis/demo_*.py)
+
+- Presentation:
+    * edited video to show vehicles being tracked between cameras and assigned movements (slide 18)
+
+- Report:
+    * Introduction, Project Requirements, Literature Survey, Design Methods, Evaluation, Societal Issues, Conclusion and Future Work, UML Diagrams
+
+
+Vincent:
+
+- Code:
+    * movement and exit annotations for cameras in corridors 2 & 3 (Corridor_Counting/annotations/movement_vectors.json and Corridor_Counting/annotations/exit_lines.json)
+    * annotations for converting ground truth 'from_camera' 'to_camera' values to 'movement_id' (Corridor_Counting/ground_truth/conversions.json)
+    * created script to generate images of our annotations (Corridor_Counting/vis/show_annotations.py)
+
+- Presentation:
+    * created video to show the movement assignment algorithm (slide 13)
+
+- Report:
+    * Introduction, Project Requirements, Literature Survey, Societal Issues
+
+
+Amy:
+
+- Code:
+    * movement and exit annotations for cameras in corridor 1 (Corridor_Counting/annotations/movement_vectors.json and Corridor_Counting/annotations/exit_lines.json)
+    * annotations for converting ground truth 'from_camera' 'to_camera' values to 'movement_id' (Corridor_Counting/ground_truth/conversions.json)
+
+- Presentation:
+    * edited video to show vehicles being tracked between cameras and assigned movements (slide 18)
+
+- Report:
+    * Introduction, Literature Survey

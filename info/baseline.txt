@@ -1,0 +1,25 @@
+AICITY2022_Track1_TAG/config/aic.yml
+- Changed some values to direct to the validation set instead of the test set
+
+
+AICITY2022_Track1_TAG/
+- Removed all hardcoded references to camera numbers in the test set. Performed across many files. Instead we get the names of all files in a directory and perform actions on these.
+
+
+AICITY2022_Track1_TAG/reid_bidir/extract_image_feat.py
+- Changed the work distribution of feature extraction to utilize all allocated GPUs
+
+
+AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/utils/filter.py
+- Rewrote subcam_list() to divide vehicles into groups for Reid based on camera adjacency. Previously used hardcoded groups based on test set. The overall output is the same we just made it generalize better.
+- Removed the usage of subzones in dividing up groups. (Was another hardcoded set of values that could not be easily applied to validation set. The assigned movement ids could be used as an improvement over this approach as discussed in Section 7.2.1 of our report.)
+
+
+AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/trajectory_fusion.py
+- Removed use of zones in reducing comparison space of ReID. This was hardcoded for the test set and resulted in far too much camera specific annotations. Only worked on test set due to all cameras being along a single straight stretch of road.
+
+
+AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/sub_cluster.py
+- Removed space-time mask that adjusted feature similarities based on hardcoded values. (These values were average travel times between each possible pair of cameras in the test set. This used an NxN matrix of values for a dataset with N cameras, so we did not include it for our 17 camera validation set.)
+- Simplified the clustering performed in get_labels()
+- Altered the data source to allow movement matching to be performed before clustering.
