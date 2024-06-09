@@ -23,7 +23,23 @@ Pre-trained ReID models can be downloaded from [here](https://drive.google.com/d
 
 Download the [yolov5x model](https://github.com/ultralytics/yolov5/releases/download/v4.0/yolov5x.pt) (pretrained on COCO), and put it into the folder `AICITY2022_Track1_TAG/detector/yolov5/`.
 
+### Dataset
+
+Our results were on the dataset from track 1 of the 2022 AI City Challenge. The dataset should be put in `AICITY2022_Track1_TAG/datasets/`
+
+You can create a symbolic link to this dataset.
+
+```
+cd AICITY2022_Track1_TAG
+mkdir datasets
+ln -s /WAVE/datasets/dmlab/aicity/aic22/track1 Dataset_A
+```
+
+Or you can download it from [here](https://www.aicitychallenge.org/2022-track1-download/).
+
 ## Running our solution
+
+_NOTE: Running this pipeline will generate a large amount of intermediate results (up to ~50G at certain points) in `AICITY2022_Track1_TAG/datasets/`. Ensure this does not exceed your quota._
 
 You can either run the full pipeline, or if some results have already been generated you can run the appropritate components.
 
@@ -77,13 +93,20 @@ cd ../Corridor_Counting
 python prediction_counting.py -s -f
 ```
 
+Remove all intermediate data generated throughout the pipeline
+
+```
+cd ../AICITY2022_Track1_TAG
+bash clean.sh
+```
+
 ## Evaluating the results
 
-We use the normalized weighted root mean squared error (nwRMSE) as described by the [2020 AI City Challenge Track 1](https://www.aicitychallenge.org/2020-data-and-evaluation/) to calculate an effectiveness score. For this we split the videos into k=200 segments.
+We use the normalized weighted root mean squared error (nwRMSE) as described by the [2020 AI City Challenge Track 1](https://www.aicitychallenge.org/2020-data-and-evaluation/) to calculate an effectiveness score. This metric divides the running corridor counts into k segments.
 
 Our evaluation script can be run as follows:
 
 ```
 cd Corridor_Counting
-python evaluate.py
+python evaluate.py <k>
 ```
