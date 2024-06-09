@@ -154,4 +154,4 @@ if __name__ == '__main__':
     for i, cid_tid_list in enumerate(all_clu):
         for cid_tid in cid_tid_list:
             cid_tid_label[cid_tid] = i + 1
-    pickle.dump({'cluster': cid_tid_label}, open('test_cluster.pkl', 'wb'))
+    pickle.dump({'cluster': cid_tid_label}, open('local_to_universal_map.pkl', 'wb'))

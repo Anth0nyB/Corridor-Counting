@@ -25,8 +25,8 @@ def parse_corridors(corridors_path):
             
     return parsed_corridors
 
-def get_predicted_sequences(test_cluster_path, all_detections_root):
-    local_to_universal_id_map = pickle.load(open(test_cluster_path, 'rb'))['cluster']
+def get_predicted_sequences(local_to_universal_map_path, all_detections_root):
+    local_to_universal_id_map = pickle.load(open(local_to_universal_map_path, 'rb'))['cluster']
         
     sequences = {}
     for pkl_file in os.listdir(all_detections_root):
@@ -45,7 +45,7 @@ def get_predicted_sequences(test_cluster_path, all_detections_root):
                 continue
             
             u_id = local_to_universal_id_map[(video_id, local_id)]
-            sequences.setdefault(u_id, []).append((video_id, data['tid'], data['movement_info']['frame'], data['movement_info']['mov_id']))
+            sequences.setdefault(u_id, []).append({"cam": video_id, "local_id": data['tid'], "mov_id": data['movement_info']['mov_id'], "frame_assigned": data['movement_info']['frame']})
     
     filtered_sequences = {}
     for u_id, sequence in sequences.items():
@@ -54,7 +54,7 @@ def get_predicted_sequences(test_cluster_path, all_detections_root):
             continue
         
         # Sort the vehicle's movement sequence based on which frame it appears for each camera
-        filtered_sequences[u_id] = sorted(sequence, key=lambda x: x[2])
+        filtered_sequences[u_id] = sorted(sequence, key=lambda x: x["frame_assigned"])
         
     return filtered_sequences    
 
@@ -67,9 +67,9 @@ def pred_counts(corridors_path, *, save_predicted_sequences = False, recompute =
         predictions = json.load(open("predicted_sequences.json", "r"))
     else:
         print("computing vehicle movement sequences...")
-        test_cluster_path = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl'
+        local_to_universal_map_path = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/local_to_universal_map.pkl'
         all_detections_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
-        predictions = get_predicted_sequences(test_cluster_path, all_detections_root)
+        predictions = get_predicted_sequences(local_to_universal_map_path, all_detections_root)
     
         if save_predicted_sequences:
             print("saving vehicle movement sequences to 'predicted_sequences.json'")
@@ -86,10 +86,10 @@ def pred_counts(corridors_path, *, save_predicted_sequences = False, recompute =
         for cor_seq, cor_id in corridors:
             frame = 0
             for event in cor_seq:                    
-                y = [(x[0], x[3]) for x in movs]
+                y = [(x["cam"], x["mov_id"]) for x in movs]
                 if event not in y:
                     break
-                frame = max(frame, int(movs[y.index(event)][2]))
+                frame = max(frame, int(movs[y.index(event)]["frame_assigned"]))
             else:
                 for j in range(frame, VIDEO_LENGTH):
                     predicted_counts[cor_id][j] += 1

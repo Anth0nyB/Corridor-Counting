@@ -10,7 +10,12 @@ def get_exits(cam_id):
     os.chdir(this_dir)
     
     annotations = json.load(open("exit_lines.json", "r"))
-    exits = annotations[str(cam_id)]
+    
+    try:
+        exits = annotations[str(cam_id)]
+    except:
+        print(f"Exit lines for cam {cam_id} not defined in \"{os.path.join(this_dir, 'exit_lines.json')}\"")
+        return
     
     os.chdir(calling_dir)
     
@@ -34,7 +39,12 @@ def get_lines(cam_id, *, absolute = False):
     
     # Read in movement vectors from annotation file
     annotations = json.load(open("movement_vectors.json", "r"))
-    movements = annotations[str(cam_id)]
+    
+    try:
+        movements = annotations[str(cam_id)]
+    except:
+        print(f"Movement vectors for cam {cam_id} not defined in \"{os.path.join(this_dir, 'movement_vectors.json')}\"")
+        return
     
     os.chdir(calling_dir)
     
