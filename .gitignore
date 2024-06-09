@@ -1,10 +1,7 @@
-*/data/*
-*/output/*
-*/weights/*
-*/venv
 **/__pycache__
 **/console.out
 **/*.pkl
+AICITY2022_Track1_TAG/venv
 AICITY2022_Track1_TAG/datasets/*
 AICITY2022_Track1_TAG/detector/yolov5/yolov5x.pt
 AICITY2022_Track1_TAG/reid_bidir/reid_model/*
