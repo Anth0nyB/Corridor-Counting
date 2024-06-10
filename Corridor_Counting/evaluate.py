@@ -12,6 +12,8 @@ if __name__ == '__main__':
     k = args.k
     segment_size = int(VIDEO_LENGTH / k)
     
+    print(f"\nEvaluating results using k={k} segments.\n")
+    
     recompute = args.f
     
     gt = gt_counts('annotations/', "ground_truth/")
