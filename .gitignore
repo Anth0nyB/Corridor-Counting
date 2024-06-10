@@ -4,11 +4,11 @@
 AICITY2022_Track1_TAG/venv
 AICITY2022_Track1_TAG/datasets/*
 AICITY2022_Track1_TAG/detector/yolov5/yolov5x.pt
-AICITY2022_Track1_TAG/reid_bidir/reid_model/*
+AICITY2022_Track1_TAG/reid_bidir/reid_model/*.pth
 AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp
 AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/log.txt
 AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/track1.txt
 AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/track1_interpolation.txt
-AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/test_cluster.pkl
+AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/local_to_universal_map.pkl
 Corridor_Counting/predicted_counts.csv
 Corridor_Counting/predicted_sequences.json
