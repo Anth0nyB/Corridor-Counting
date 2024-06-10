@@ -19,7 +19,7 @@ deactivate
 
 ### MTMCT Module
 
-Pre-trained ReID models can be downloaded from [here](https://drive.google.com/drive/folders/1trYAwgsnB414IHcDfkqGSOTJzet0vkvx?usp=sharing). Put ReID models into the folder `AICITY2022_Track1_TAG/reid_bidir/reid_model/`.
+Pre-trained ReID models can be downloaded from [here](https://drive.google.com/drive/folders/1trYAwgsnB414IHcDfkqGSOTJzet0vkvx?usp=sharing). Put the ReID models into the folder `AICITY2022_Track1_TAG/reid_bidir/reid_model/`.
 
 Download the [yolov5x model](https://github.com/ultralytics/yolov5/releases/download/v4.0/yolov5x.pt) (pretrained on COCO), and put it into the folder `AICITY2022_Track1_TAG/detector/yolov5/`.
 
@@ -39,7 +39,7 @@ Or you can download it from [here](https://www.aicitychallenge.org/2022-track1-d
 
 ## Running our solution
 
-_NOTE: Running this pipeline will generate a large amount of intermediate results (up to ~50G at certain points) in `AICITY2022_Track1_TAG/datasets/`. Ensure this does not exceed your quota. This data can be removed with `AICITY2022_Track1_TAG/clean.sh`._
+_NOTE: Running this pipeline will generate a large amount of intermediate results (up to ~50G at certain points) in `AICITY2022_Track1_TAG/datasets/`. Ensure this does not exceed your quota. This data can be removed afterwards with `AICITY2022_Track1_TAG/clean.sh`._
 
 You can either run the full pipeline, or if some results have already been generated you can run the appropritate components.
 
