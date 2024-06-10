@@ -56,7 +56,7 @@ def get_gt_sequences(gt_dir):
                 movement = candidate["movement_id"]
                 break
         else:
-            print(f"Could not find conversion for\n{row}")
+            # print(f"Could not find conversion for\n{row}")
             pass
                 
         vehicles[corridor].setdefault(row['vehicle_id'], []).append((int(cam), row['to_frame'], movement))

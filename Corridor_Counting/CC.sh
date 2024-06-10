@@ -52,6 +52,6 @@ python gen_res.py "aic.yml"
 
 ### Counting ###
 cd ../../../../Corridor_Counting
-python prediction_counting.py -s -f
+python prediction_counting.py -f
 
 deactivate

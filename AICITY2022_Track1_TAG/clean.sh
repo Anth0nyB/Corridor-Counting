@@ -3,23 +3,34 @@
 
 cd datasets
 
+echo "Removing datasets/detect_reid1/*"
 cd detect_reid1
 rm -r *
 
+echo "Removing datasets/detect_reid2/*"
 cd ../detect_reid2
 rm -r *
 
+echo "Removing datasets/detect_reid3/*"
 cd ../detect_reid3
 rm -r *
 
+echo "Removing datasets/detection/*"
 cd ../detection
 rm -r *
 
+echo "Removing datasets/detect/*"
 cd ../detect
 rm -r *
 
+echo "Removing reid_bidir/reid-matching/tools/local_to_universal_map.pkl"
 cd ../../reid_bidir/reid-matching/tools
-rm test_cluster.py
+rm local_to_universal_map.pkl
 
-cd exp/viz/validation/S05
+echo "Removing reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/*"
+cd exp/viz/validation/S05/movement
+rm *
+
+echo "Removing reid_bidir/reid-matching/tools/exp/viz/validation/S05/trajectory/*"
+cd ../trajectory
 rm *

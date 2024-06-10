@@ -39,7 +39,7 @@ Or you can download it from [here](https://www.aicitychallenge.org/2022-track1-d
 
 ## Running our solution
 
-_NOTE: Running this pipeline will generate a large amount of intermediate results (up to ~50G at certain points) in `AICITY2022_Track1_TAG/datasets/`. Ensure this does not exceed your quota._
+_NOTE: Running this pipeline will generate a large amount of intermediate results (up to ~50G at certain points) in `AICITY2022_Track1_TAG/datasets/`. Ensure this does not exceed your quota. This data can be removed with `AICITY2022_Track1_TAG/clean.sh`._
 
 You can either run the full pipeline, or if some results have already been generated you can run the appropritate components.
 
@@ -93,7 +93,7 @@ cd ../Corridor_Counting
 python prediction_counting.py -s -f
 ```
 
-Remove all intermediate data generated throughout the pipeline
+Remove all intermediate data generated throughout the pipeline.
 
 ```
 cd ../AICITY2022_Track1_TAG

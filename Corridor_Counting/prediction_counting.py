@@ -59,26 +59,29 @@ def get_predicted_sequences(local_to_universal_map_path, all_detections_root):
     return filtered_sequences    
 
 
-def pred_counts(corridors_path, *, save_predicted_sequences = False, recompute = False):
+def pred_counts(corridors_path, *, recompute = False):
+    if not recompute:
+        predicted_counts = pd.read_csv("predicted_counts.csv", sep=",", index_col=0)
+        return predicted_counts.to_numpy()
+    
     corridors = parse_corridors(corridors_path)
     
-    if os.path.exists("predicted_sequences.json") and not recompute:
-        print("loading vehicle movement sequences from 'predicted_sequences.json'")
-        predictions = json.load(open("predicted_sequences.json", "r"))
-    else:
-        print("computing vehicle movement sequences...")
-        local_to_universal_map_path = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/local_to_universal_map.pkl'
-        all_detections_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
-        predictions = get_predicted_sequences(local_to_universal_map_path, all_detections_root)
+    local_to_universal_map_path = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/local_to_universal_map.pkl'
+    all_detections_root = '../AICITY2022_Track1_TAG/reid_bidir/reid-matching/tools/exp/viz/validation/S05/movement/'
     
-        if save_predicted_sequences:
-            print("saving vehicle movement sequences to 'predicted_sequences.json'")
-            json.dump(predictions, open("predicted_sequences.json", "w"))
+    print("computing vehicle movement sequences...")
+    predictions = get_predicted_sequences(local_to_universal_map_path, all_detections_root)
+    
+    print("saving vehicle movement sequences to 'predicted_sequences.json'")
+    json.dump(predictions, open("predicted_sequences.json", "w"))
+
+    print()
     
     # Get counts based on predefined corridors.
     # A frame by frame view of the corridor counts 
     # where row i corresponds to the corridor i counts
     # and column j corresponds to the count through frame j.
+    print("computing corridor counts...")
     predicted_counts = np.zeros(shape=(NUM_CORRIDORS, VIDEO_LENGTH))
         
     for u_id, movs in predictions.items():
@@ -108,13 +111,8 @@ def pred_counts(corridors_path, *, save_predicted_sequences = False, recompute =
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', action='store_true', help="Save the intermediate vehicle movement sequences to 'predicted_sequences.json'")
-    parser.add_argument('-f', action='store_true', help="Force recompute the vehicle movement sequences instead of loading from 'predicted_sequences.json'")
+    parser.add_argument('-f', action='store_true', help="Force recompute the vehicle movement sequences and corridor counts instead of loading them.")
 
     args = parser.parse_args()
 
-    pred_counts("annotations/corridors.json", save_predicted_sequences=args.s, recompute=args.f)
-        
-    
-                    
-        
+    pred_counts("annotations/corridors.json", recompute=args.f)
