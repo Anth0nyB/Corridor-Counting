@@ -30,8 +30,7 @@ Our results were on the dataset from track 1 of the 2022 AI City Challenge. The 
 You can create a symbolic link to this dataset.
 
 ```
-cd AICITY2022_Track1_TAG
-mkdir datasets
+cd AICITY2022_Track1_TAG/datasets
 ln -s /WAVE/datasets/dmlab/aicity/aic22/track1 Dataset_A
 ```
 
