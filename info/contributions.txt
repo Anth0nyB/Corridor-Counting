@@ -47,4 +47,4 @@ Amy:
     * edited video to show vehicles being tracked between cameras and assigned movements (slide 18)
 
 - Report:
-    * Introduction, Literature Survey
+    * Introduction, Project Requirements, Literature Survey
